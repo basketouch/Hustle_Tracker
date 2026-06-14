@@ -1027,13 +1027,12 @@ function renderHome() {
         const svgStar  = `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
 
         const shortcut = (icon, title, sub, onclick, accent='') => `
-            <button onclick="${onclick}" style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:22px 18px;cursor:pointer;text-align:left;color:var(--text);display:flex;align-items:center;gap:16px;width:100%;-webkit-tap-highlight-color:transparent;" ontouchstart="">
-                <div style="width:46px;height:46px;border-radius:12px;background:${accent||'rgba(255,215,0,0.08)'};display:flex;align-items:center;justify-content:center;flex-shrink:0;">${icon}</div>
-                <div style="flex:1;">
-                    <div style="font-size:0.95rem;font-weight:800;">${title}</div>
-                    <div style="font-size:0.72rem;color:var(--muted);margin-top:3px;">${sub}</div>
+            <button onclick="${onclick}" style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px 14px;cursor:pointer;text-align:left;color:var(--text);display:flex;flex-direction:column;gap:12px;-webkit-tap-highlight-color:transparent;" ontouchstart="">
+                <div style="width:42px;height:42px;border-radius:11px;background:${accent||'rgba(255,215,0,0.08)'};display:flex;align-items:center;justify-content:center;">${icon}</div>
+                <div>
+                    <div style="font-size:0.88rem;font-weight:800;">${title}</div>
+                    <div style="font-size:0.68rem;color:var(--muted);margin-top:3px;">${sub}</div>
                 </div>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--muted2)" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
             </button>`;
 
         return `
@@ -1046,8 +1045,8 @@ function renderHome() {
             </div>
             ${liveSession ? `<span style="background:#ef476f;color:#fff;font-size:0.65rem;font-weight:800;padding:4px 10px;border-radius:20px;letter-spacing:0.5px;flex-shrink:0;">EN VIVO</span>` : ''}
         </div>
-        <!-- Tarjetas sueltas -->
-        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:24px;">
+        <!-- Grid 2x2 -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:24px;">
             ${shortcut(svgBar,   'Acumulados',    'Stats de temporada',    `openTeamTab('${t.id}','acumulados')`)}
             ${shortcut(liveSession ? svgLive : svgPlay,
                        liveSession ? 'Sesión en curso' : 'Nueva sesión',
