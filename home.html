@@ -569,7 +569,7 @@
 
         <!-- ACADEMY -->
         <div class="slabel" style="margin-top:4px;">Hustle Academy</div>
-        <div id="academyGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:24px;">
+        <div id="academyGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:16px;">
             <!-- Los vídeos se renderizan desde ACADEMY_VIDEOS -->
         </div>
     </div>
@@ -865,9 +865,11 @@
 // ── ACADEMY VIDEOS ── Edita esta lista para añadir/quitar vídeos
 const ACADEMY_VIDEOS = [
     { id: 'dQw4w9WgXcQ', title: 'Cómo usar Hustle Tracker',   label: 'TUTORIAL' },
-    { id: 'dQw4w9WgXcQ', title: 'Defensa en Pick & Roll',      label: 'TÁCTICA' },
-    { id: 'dQw4w9WgXcQ', title: 'Métricas defensivas clave',   label: 'ANÁLISIS' },
-    { id: 'dQw4w9WgXcQ', title: 'Cómo leer los acumulados',    label: 'TUTORIAL' },
+    { id: 'dQw4w9WgXcQ', title: 'Defensa en Pick & Roll',      label: 'TÁCTICA'  },
+    { id: 'dQw4w9WgXcQ', title: 'Métricas defensivas',         label: 'ANÁLISIS' },
+    { id: 'dQw4w9WgXcQ', title: 'Leer los acumulados',         label: 'TUTORIAL' },
+    { id: 'dQw4w9WgXcQ', title: 'Defensa individal 1vs1',      label: 'TÁCTICA'  },
+    { id: 'dQw4w9WgXcQ', title: 'Configurar acciones',         label: 'TUTORIAL' },
 ];
 
 function renderAcademy() {
@@ -877,15 +879,15 @@ function renderAcademy() {
         const thumb = `https://img.youtube.com/vi/${v.id}/mqdefault.jpg`;
         const url   = `https://www.youtube.com/watch?v=${v.id}`;
         return `
-        <a href="${url}" target="_blank" rel="noopener" style="display:block;border-radius:var(--radius);overflow:hidden;position:relative;text-decoration:none;background:#000;">
-            <img src="${thumb}" style="width:100%;aspect-ratio:16/9;object-fit:cover;display:block;opacity:0.85;">
-            <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:8px;">
-                <span style="background:var(--primary);color:#000;font-size:0.58rem;font-weight:900;padding:2px 7px;border-radius:20px;align-self:flex-start;letter-spacing:0.5px;">${v.label}</span>
-                <div style="font-size:0.72rem;font-weight:800;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,0.8);line-height:1.2;">${v.title}</div>
+        <a href="${url}" target="_blank" rel="noopener" style="display:block;border-radius:10px;overflow:hidden;position:relative;text-decoration:none;background:#000;">
+            <img src="${thumb}" style="width:100%;aspect-ratio:16/9;object-fit:cover;display:block;opacity:0.82;">
+            <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:5px;">
+                <span style="background:var(--primary);color:#000;font-size:0.52rem;font-weight:900;padding:2px 5px;border-radius:20px;align-self:flex-start;letter-spacing:0.3px;">${v.label}</span>
+                <div style="font-size:0.62rem;font-weight:800;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,0.9);line-height:1.2;">${v.title}</div>
             </div>
             <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;">
-                <div style="width:32px;height:32px;background:rgba(0,0,0,0.55);border-radius:50%;display:flex;align-items:center;justify-content:center;">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="#fff"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                <div style="width:26px;height:26px;background:rgba(0,0,0,0.55);border-radius:50%;display:flex;align-items:center;justify-content:center;">
+                    <svg width="9" height="9" viewBox="0 0 24 24" fill="#fff"><polygon points="5 3 19 12 5 21 5 3"/></svg>
                 </div>
             </div>
         </a>`;
@@ -1063,18 +1065,15 @@ function renderHome() {
         const svgUsers = `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`;
         const svgStar  = `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
 
-        const shortcut = (icon, title, sub, onclick, accent='') => `
-            <button onclick="${onclick}" style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px 14px;cursor:pointer;text-align:left;color:var(--text);display:flex;flex-direction:column;gap:12px;-webkit-tap-highlight-color:transparent;" ontouchstart="">
-                <div style="width:42px;height:42px;border-radius:11px;background:${accent||'rgba(255,215,0,0.08)'};display:flex;align-items:center;justify-content:center;">${icon}</div>
-                <div>
-                    <div style="font-size:0.88rem;font-weight:800;">${title}</div>
-                    <div style="font-size:0.68rem;color:var(--muted);margin-top:3px;">${sub}</div>
-                </div>
+        const shortcut = (icon, label, onclick, accent='') => `
+            <button onclick="${onclick}" style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 8px 12px;cursor:pointer;text-align:center;color:var(--text);display:flex;flex-direction:column;align-items:center;gap:8px;-webkit-tap-highlight-color:transparent;" ontouchstart="">
+                <div style="width:38px;height:38px;border-radius:10px;background:${accent||'rgba(255,215,0,0.08)'};display:flex;align-items:center;justify-content:center;flex-shrink:0;">${icon}</div>
+                <div style="font-size:0.72rem;font-weight:800;line-height:1.2;">${label}</div>
             </button>`;
 
         return `
         <!-- Cabecera del equipo -->
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
             <div class="team-card-initial">${initial}</div>
             <div style="flex:1;">
                 <div class="team-card-name">${t.name}</div>
@@ -1082,16 +1081,15 @@ function renderHome() {
             </div>
             ${liveSession ? `<span style="background:#ef476f;color:#fff;font-size:0.65rem;font-weight:800;padding:4px 10px;border-radius:20px;letter-spacing:0.5px;flex-shrink:0;">EN VIVO</span>` : ''}
         </div>
-        <!-- Grid 2x2 -->
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:24px;">
-            ${shortcut(svgBar,   'Acumulados',    'Stats de temporada',    `openTeamTab('${t.id}','acumulados')`)}
+        <!-- 4 tarjetas en fila -->
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px;">
+            ${shortcut(svgBar,  'Acumula&shy;dos', `openTeamTab('${t.id}','acumulados')`)}
             ${shortcut(liveSession ? svgLive : svgPlay,
-                       liveSession ? 'Sesión en curso' : 'Nueva sesión',
-                       liveSession ? 'Continuar tracking' : 'Iniciar tracking',
+                       liveSession ? 'En curso' : 'Nueva sesión',
                        liveSession ? `openTeamTab('${t.id}','sesiones')` : `openSetupForTeam('${t.id}')`,
                        liveSession ? 'rgba(239,71,111,0.1)' : '')}
-            ${shortcut(svgUsers, 'Jugadores',     'Editar plantilla',      `openTeamTab('${t.id}','jugadores')`)}
-            ${shortcut(svgStar,  'Acciones',      `${t.actions.length} acciones · editar`, `openTeamTab('${t.id}','acciones')`)}
+            ${shortcut(svgUsers, 'Jugadores', `openTeamTab('${t.id}','jugadores')`)}
+            ${shortcut(svgStar,  'Acciones',  `openTeamTab('${t.id}','acciones')`)}
         </div>`;
     }).join('');
 }
