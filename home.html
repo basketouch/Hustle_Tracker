@@ -566,6 +566,12 @@
         <div id="homeEmpty" class="empty hidden">
             Sin equipos.<br>Pulsa <b>+</b> para crear el primero.
         </div>
+
+        <!-- ACADEMY -->
+        <div class="slabel" style="margin-top:4px;">Hustle Academy</div>
+        <div id="academyGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:24px;">
+            <!-- Los vídeos se renderizan desde ACADEMY_VIDEOS -->
+        </div>
     </div>
     <button class="fab" onclick="showNewTeamModal()">+</button>
 </div>
@@ -856,6 +862,36 @@
 // ════════════════════════════════════════════
 // DATA
 // ════════════════════════════════════════════
+// ── ACADEMY VIDEOS ── Edita esta lista para añadir/quitar vídeos
+const ACADEMY_VIDEOS = [
+    { id: 'dQw4w9WgXcQ', title: 'Cómo usar Hustle Tracker',   label: 'TUTORIAL' },
+    { id: 'dQw4w9WgXcQ', title: 'Defensa en Pick & Roll',      label: 'TÁCTICA' },
+    { id: 'dQw4w9WgXcQ', title: 'Métricas defensivas clave',   label: 'ANÁLISIS' },
+    { id: 'dQw4w9WgXcQ', title: 'Cómo leer los acumulados',    label: 'TUTORIAL' },
+];
+
+function renderAcademy() {
+    const grid = document.getElementById('academyGrid');
+    if(!grid) return;
+    grid.innerHTML = ACADEMY_VIDEOS.map(v => {
+        const thumb = `https://img.youtube.com/vi/${v.id}/mqdefault.jpg`;
+        const url   = `https://www.youtube.com/watch?v=${v.id}`;
+        return `
+        <a href="${url}" target="_blank" rel="noopener" style="display:block;border-radius:var(--radius);overflow:hidden;position:relative;text-decoration:none;background:#000;">
+            <img src="${thumb}" style="width:100%;aspect-ratio:16/9;object-fit:cover;display:block;opacity:0.85;">
+            <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:8px;">
+                <span style="background:var(--primary);color:#000;font-size:0.58rem;font-weight:900;padding:2px 7px;border-radius:20px;align-self:flex-start;letter-spacing:0.5px;">${v.label}</span>
+                <div style="font-size:0.72rem;font-weight:800;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,0.8);line-height:1.2;">${v.title}</div>
+            </div>
+            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;">
+                <div style="width:32px;height:32px;background:rgba(0,0,0,0.55);border-radius:50%;display:flex;align-items:center;justify-content:center;">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="#fff"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                </div>
+            </div>
+        </a>`;
+    }).join('');
+}
+
 const DEFAULT_ACTIONS = [
     { id:'a1', name:'Contested T2P', weight:15 },
     { id:'a2', name:'Contested T3P', weight:20 },
@@ -1013,6 +1049,7 @@ function renderHome() {
     const list = document.getElementById('homeTeamsList');
     const empty = document.getElementById('homeEmpty');
     document.getElementById('homeUserEmail').textContent = curUser?.email || '';
+    renderAcademy();
     if(!teams.length) { list.innerHTML=''; empty.classList.remove('hidden'); return; }
     empty.classList.add('hidden');
     list.innerHTML = teams.map(t => {
