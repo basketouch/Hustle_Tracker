@@ -569,7 +569,7 @@
 
         <!-- ACADEMY -->
         <div class="slabel" style="margin-top:4px;">Hustle Academy</div>
-        <div id="academyGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:16px;">
+        <div id="academyGrid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-bottom:16px;">
             <!-- Los vídeos se renderizan desde ACADEMY_VIDEOS -->
         </div>
     </div>
@@ -909,8 +909,8 @@ function renderAcademy() {
         <div onclick="openVideo('${v.id}','${v.title.replace(/'/g,"\\'")}') " style="display:block;border-radius:10px;overflow:hidden;position:relative;cursor:pointer;background:#000;">
             <img src="${thumb}" style="width:100%;aspect-ratio:16/9;object-fit:cover;display:block;opacity:0.82;">
             <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:5px;">
-                <span style="background:var(--primary);color:#000;font-size:0.52rem;font-weight:900;padding:2px 5px;border-radius:20px;align-self:flex-start;letter-spacing:0.3px;">${v.label}</span>
-                <div style="font-size:0.62rem;font-weight:800;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,0.9);line-height:1.2;">${v.title}</div>
+                <span style="background:var(--primary);color:#000;font-size:0.58rem;font-weight:900;padding:2px 7px;border-radius:20px;align-self:flex-start;letter-spacing:0.3px;">${v.label}</span>
+                <div style="font-size:0.72rem;font-weight:800;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,0.9);line-height:1.2;">${v.title}</div>
             </div>
             <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;">
                 <div style="width:26px;height:26px;background:rgba(0,0,0,0.55);border-radius:50%;display:flex;align-items:center;justify-content:center;">
