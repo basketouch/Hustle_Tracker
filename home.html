@@ -96,6 +96,10 @@
         }
         .fab:active { transform: scale(0.93); }
 
+        /* Academy grid: 2 col en móvil, 3 col en escritorio */
+        .academy-grid { display: grid; gap: 6px; grid-template-columns: repeat(2, 1fr); }
+        @media (min-width: 600px) { .academy-grid { grid-template-columns: repeat(3, 1fr); } }
+
         /* ── TABS ── */
         .tabs {
             display: flex; border-bottom: 1px solid var(--border);
@@ -569,7 +573,7 @@
 
         <!-- ACADEMY -->
         <div class="slabel" style="margin-top:4px;">Hustle Academy</div>
-        <div id="academyGrid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-bottom:16px;">
+        <div id="academyGrid" class="academy-grid" style="margin-bottom:16px;">
             <!-- Los vídeos se renderizan desde ACADEMY_VIDEOS -->
         </div>
     </div>
