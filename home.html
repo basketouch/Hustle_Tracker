@@ -1034,22 +1034,33 @@ function renderHome() {
             <!-- Grid de accesos directos -->
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);">
                 <button onclick="openTeamTab('${t.id}','acumulados')" style="background:var(--card2);border:none;padding:16px 12px;cursor:pointer;text-align:left;color:var(--text);">
-                    <div style="font-size:1.4rem;margin-bottom:4px;">📊</div>
+                    <div style="margin-bottom:8px;">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                    </div>
                     <div style="font-size:0.82rem;font-weight:800;">Acumulados</div>
                     <div style="font-size:0.68rem;color:var(--muted);margin-top:2px;">Stats de temporada</div>
                 </button>
                 <button onclick="${liveSession ? `openTeamTab('${t.id}','sesiones')` : `openSetupForTeam('${t.id}')`}" style="background:var(--card2);border:none;padding:16px 12px;cursor:pointer;text-align:left;color:var(--text);">
-                    <div style="font-size:1.4rem;margin-bottom:4px;">${liveSession ? '🔴' : '▶️'}</div>
+                    <div style="margin-bottom:8px;">
+                        ${liveSession
+                            ? `<svg width="22" height="22" viewBox="0 0 24 24" fill="#ef476f" stroke="#ef476f" stroke-width="2"><circle cx="12" cy="12" r="8"/></svg>`
+                            : `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>`
+                        }
+                    </div>
                     <div style="font-size:0.82rem;font-weight:800;">${liveSession ? 'Sesión en curso' : 'Nueva sesión'}</div>
                     <div style="font-size:0.68rem;color:var(--muted);margin-top:2px;">${liveSession ? 'Continuar tracking' : 'Iniciar tracking'}</div>
                 </button>
                 <button onclick="openTeamTab('${t.id}','jugadores')" style="background:var(--card2);border:none;padding:16px 12px;cursor:pointer;text-align:left;color:var(--text);">
-                    <div style="font-size:1.4rem;margin-bottom:4px;">👥</div>
+                    <div style="margin-bottom:8px;">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    </div>
                     <div style="font-size:0.82rem;font-weight:800;">Jugadores</div>
                     <div style="font-size:0.68rem;color:var(--muted);margin-top:2px;">Editar plantilla</div>
                 </button>
                 <button onclick="openTeamTab('${t.id}','acciones')" style="background:var(--card2);border:none;padding:16px 12px;cursor:pointer;text-align:left;color:var(--text);">
-                    <div style="font-size:1.4rem;margin-bottom:4px;">⚡</div>
+                    <div style="margin-bottom:8px;">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    </div>
                     <div style="font-size:0.82rem;font-weight:800;">Acciones</div>
                     <div style="font-size:0.68rem;color:var(--muted);margin-top:2px;">${t.actions.length} acciones · editar</div>
                 </button>
