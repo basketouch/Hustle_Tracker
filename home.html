@@ -721,7 +721,7 @@
 <div id="view-summary" class="view">
     <div class="app-header">
         <div class="app-header-left">
-            <button class="back-btn" onclick="showView(prevView)">‹</button>
+            <button class="back-btn" onclick="showView(prevView==='home'?'home':prevView);if(prevView==='home')renderHome()">‹</button>
             <div>
                 <div class="app-name">Resumen</div>
                 <div class="app-sub" id="sumSub"></div>
@@ -740,11 +740,12 @@
                 <tbody id="sumBody"></tbody>
             </table>
         </div>
-        <div style="margin-top:14px;">
-            <button class="btn-gold" onclick="exportPrint()" style="margin-bottom:8px;">Exportar para imprimir (A4)</button>
-            <button class="btn-dark" onclick="openSetup()">+ Nueva sesión</button>
+        <div style="margin-top:20px;display:flex;flex-direction:column;gap:10px;">
+            <button class="btn-gold" onclick="goToTeamAnalysis()" style="font-size:0.95rem;">Ver análisis del equipo</button>
+            <button class="btn-dark" onclick="showView('home');renderHome()">Ir al inicio</button>
+            <button onclick="exportPrint()" style="background:none;border:1px solid var(--border);border-radius:10px;padding:13px;color:var(--muted);font-size:0.82rem;cursor:pointer;width:100%;">Exportar resumen (A4)</button>
         </div>
-        <div style="height:20px;"></div>
+        <div style="height:24px;"></div>
     </div>
 </div>
 
@@ -1663,7 +1664,13 @@ async function confirmFinish() {
     hideModal('modal-finish'); goSummary(true);
 }
 
-function goSummary(fromLive) { prevView = fromLive ? 'live' : 'team'; showView('summary'); }
+function goSummary(fromLive) { prevView = fromLive ? 'home' : 'team'; showView('summary'); }
+
+function goToTeamAnalysis() {
+    const s = getSession(curSessionId);
+    if(s) { curTeamId = s.teamId; curTab = 'acumulados'; showView('team'); switchTab('acumulados', true); }
+    else showView('home');
+}
 
 // ════════════════════════════════════════════
 // SUMMARY
