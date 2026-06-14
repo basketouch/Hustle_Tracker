@@ -706,7 +706,7 @@
 <div id="view-summary" class="view">
     <div class="app-header">
         <div class="app-header-left">
-            <button class="back-btn" onclick="showView('team')">‹</button>
+            <button class="back-btn" onclick="showView(prevView)">‹</button>
             <div>
                 <div class="app-name">Resumen</div>
                 <div class="app-sub" id="sumSub"></div>
@@ -907,6 +907,7 @@ let curTab = 'acumulados';
 let selPlayerIdx = null;
 let sesType = 'entrenamiento';
 let setupP = [];
+let prevView = 'team';
 
 // ════════════════════════════════════════════
 // AUTH
@@ -1179,7 +1180,7 @@ function openSession(id) {
     curSessionId=id;
     const s=getSession(id);
     if(s.status==='live') { selPlayerIdx=null; showView('live'); }
-    else showView('summary');
+    else { prevView='team'; showView('summary'); }
 }
 
 // ── ROSTER ──────────────────────────────────
@@ -1368,7 +1369,7 @@ function renderPlayer() {
             const stat=s.stats[curPlayerId];
             const score=stat?stat.totalScore:0;
             const bc=s.type==='partido'?'badge-p':'badge-t';
-            return `<div class="rank-row" onclick="curSessionId='${s.id}';showView('summary')">
+            return `<div class="rank-row" onclick="curSessionId='${s.id}';prevView='player';showView('summary')">
                 <span class="badge ${bc}">${s.type==='partido'?'P':'E'}</span>
                 <span class="rank-name" style="margin-left:8px;">${s.name||fmtDate(s.date)}</span>
                 <span class="rank-score">${score.toFixed(1)}</span>
@@ -1512,7 +1513,7 @@ async function confirmFinish() {
     hideModal('modal-finish'); goSummary(true);
 }
 
-function goSummary(fromLive) { showView('summary'); }
+function goSummary(fromLive) { prevView = fromLive ? 'live' : 'team'; showView('summary'); }
 
 // ════════════════════════════════════════════
 // SUMMARY
