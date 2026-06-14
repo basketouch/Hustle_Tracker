@@ -836,6 +836,19 @@
     </div>
 </div>
 
+<!-- VIDEO PLAYER MODAL -->
+<div id="modal-video" style="display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,0.92);flex-direction:column;align-items:center;justify-content:center;">
+    <div style="width:100%;max-width:480px;padding:0 16px;box-sizing:border-box;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+            <div id="videoTitle" style="font-size:0.9rem;font-weight:800;color:#fff;flex:1;padding-right:12px;"></div>
+            <button onclick="closeVideo()" style="background:rgba(255,255,255,0.12);border:none;color:#fff;width:34px;height:34px;border-radius:50%;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">✕</button>
+        </div>
+        <div style="position:relative;width:100%;padding-top:56.25%;border-radius:12px;overflow:hidden;background:#000;">
+            <iframe id="videoFrame" style="position:absolute;inset:0;width:100%;height:100%;border:none;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+    </div>
+</div>
+
 <div id="modal-edit-action" class="modal">
     <div class="mbox">
         <div class="mbox-title" id="editActionTitle">Nueva acción</div>
@@ -864,13 +877,27 @@
 // ════════════════════════════════════════════
 // ── ACADEMY VIDEOS ── Edita esta lista para añadir/quitar vídeos
 const ACADEMY_VIDEOS = [
-    { id: 'dQw4w9WgXcQ', title: 'Cómo usar Hustle Tracker',   label: 'TUTORIAL' },
-    { id: 'dQw4w9WgXcQ', title: 'Defensa en Pick & Roll',      label: 'TÁCTICA'  },
-    { id: 'dQw4w9WgXcQ', title: 'Métricas defensivas',         label: 'ANÁLISIS' },
-    { id: 'dQw4w9WgXcQ', title: 'Leer los acumulados',         label: 'TUTORIAL' },
-    { id: 'dQw4w9WgXcQ', title: 'Defensa individal 1vs1',      label: 'TÁCTICA'  },
-    { id: 'dQw4w9WgXcQ', title: 'Configurar acciones',         label: 'TUTORIAL' },
+    { id: 'pE02JA7DeIY', title: 'Cómo usar Hustle Tracker',   label: 'TUTORIAL' },
+    { id: 'LKao3CHjxn8', title: 'Defensa en Pick & Roll',      label: 'TÁCTICA'  },
+    { id: 'faTgLHKCygQ', title: 'Métricas defensivas',         label: 'ANÁLISIS' },
+    { id: 'A870tqxVj6o', title: 'Leer los acumulados',         label: 'TUTORIAL' },
+    { id: 'Zq3YZ8S4UlY', title: 'Defensa individual 1vs1',     label: 'TÁCTICA'  },
+    { id: 'MJMl8xAB5X8', title: 'Configurar acciones',         label: 'TUTORIAL' },
 ];
+
+function openVideo(id, title) {
+    document.getElementById('videoTitle').textContent = title;
+    document.getElementById('videoFrame').src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
+    document.getElementById('modal-video').style.display = 'flex';
+}
+function closeVideo() {
+    document.getElementById('modal-video').style.display = 'none';
+    document.getElementById('videoFrame').src = '';
+}
+// Cerrar tocando fuera del player
+document.getElementById('modal-video').addEventListener('click', function(e) {
+    if(e.target === this) closeVideo();
+});
 
 function renderAcademy() {
     const grid = document.getElementById('academyGrid');
@@ -879,7 +906,7 @@ function renderAcademy() {
         const thumb = `https://img.youtube.com/vi/${v.id}/mqdefault.jpg`;
         const url   = `https://www.youtube.com/watch?v=${v.id}`;
         return `
-        <a href="${url}" target="_blank" rel="noopener" style="display:block;border-radius:10px;overflow:hidden;position:relative;text-decoration:none;background:#000;">
+        <div onclick="openVideo('${v.id}','${v.title.replace(/'/g,"\\'")}') " style="display:block;border-radius:10px;overflow:hidden;position:relative;cursor:pointer;background:#000;">
             <img src="${thumb}" style="width:100%;aspect-ratio:16/9;object-fit:cover;display:block;opacity:0.82;">
             <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:5px;">
                 <span style="background:var(--primary);color:#000;font-size:0.52rem;font-weight:900;padding:2px 5px;border-radius:20px;align-self:flex-start;letter-spacing:0.3px;">${v.label}</span>
@@ -890,7 +917,7 @@ function renderAcademy() {
                     <svg width="9" height="9" viewBox="0 0 24 24" fill="#fff"><polygon points="5 3 19 12 5 21 5 3"/></svg>
                 </div>
             </div>
-        </a>`;
+        </div>`;
     }).join('');
 }
 
