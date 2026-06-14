@@ -4,6 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Hustle Tracker</title>
+
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#FFD700">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Hustle">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <style>
         :root {
@@ -581,6 +590,7 @@
         <div class="tab on" id="tab-acumulados" onclick="switchTab('acumulados')">Acumulados</div>
         <div class="tab" id="tab-sesiones" onclick="switchTab('sesiones')">Sesiones</div>
         <div class="tab" id="tab-jugadores" onclick="switchTab('jugadores')">Jugadores</div>
+        <div class="tab" id="tab-acciones" onclick="switchTab('acciones')">Acciones</div>
     </div>
     <div class="scroll" style="padding-top:4px;">
 
@@ -594,6 +604,11 @@
             <div class="slabel">Historial</div>
             <div id="sessionsList"></div>
             <div id="sessionsEmpty" class="empty hidden">Sin sesiones aún.<br>Pulsa ▶ para iniciar una.</div>
+        </div>
+
+        <!-- TAB: ACCIONES -->
+        <div id="tc-acciones" class="hidden">
+            <div id="accionesContent"></div>
         </div>
 
         <!-- TAB: JUGADORES -->
@@ -814,6 +829,26 @@
     </div>
 </div>
 
+<div id="modal-edit-action" class="modal">
+    <div class="mbox">
+        <div class="mbox-title" id="editActionTitle">Nueva acción</div>
+        <input type="text" class="minput" id="editActionName" placeholder="Nombre de la acción" maxlength="30">
+        <div style="margin-top:10px;">
+            <div style="font-size:0.75rem;color:var(--muted);margin-bottom:6px;">PUNTOS POR ACCIÓN</div>
+            <div style="display:flex;align-items:center;gap:12px;">
+                <input type="range" id="editActionWeight" min="5" max="100" step="5" value="20"
+                    oninput="document.getElementById('editActionWeightVal').textContent=this.value"
+                    style="flex:1;accent-color:var(--primary);">
+                <span id="editActionWeightVal" style="font-size:1.3rem;font-weight:900;color:var(--primary);min-width:32px;text-align:right;">20</span>
+            </div>
+        </div>
+        <div class="mactions">
+            <button class="mbtn mbtn-ghost" onclick="hideModal('modal-edit-action')">Cancelar</button>
+            <button class="mbtn mbtn-primary" onclick="saveEditAction()">Guardar</button>
+        </div>
+    </div>
+</div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
 
@@ -983,18 +1018,56 @@ function renderHome() {
         const ts = _cache.sessions.filter(s=>s.teamId===t.id&&s.status==='done');
         const last = [...ts].sort((a,b)=>b.date.localeCompare(a.date))[0];
         const initial = t.name.charAt(0).toUpperCase();
-        return `<div class="team-card" onclick="openTeam('${t.id}')">
-            <div class="team-card-initial">${initial}</div>
-            <div class="team-card-info">
-                <div class="team-card-name">${t.name}</div>
-                <div class="team-card-meta">${t.players.length} jugadores · ${ts.length} sesiones${last?' · '+fmtDate(last.date):''}</div>
+        const liveSession = _cache.sessions.find(s=>s.teamId===t.id&&s.status==='live');
+        return `
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:16px;overflow:hidden;">
+            <!-- Cabecera del equipo -->
+            <div style="display:flex;align-items:center;gap:12px;padding:16px;border-bottom:1px solid var(--border);">
+                <div class="team-card-initial">${initial}</div>
+                <div style="flex:1;">
+                    <div class="team-card-name">${t.name}</div>
+                    <div class="team-card-meta">${t.players.length} jugadores · ${ts.length} sesiones${last?' · '+fmtDate(last.date):''}</div>
+                </div>
+                ${liveSession ? `<span style="background:#ef476f;color:#fff;font-size:0.65rem;font-weight:800;padding:3px 8px;border-radius:20px;letter-spacing:0.5px;">EN VIVO</span>` : ''}
             </div>
-            <span class="team-card-arrow">›</span>
+            <!-- Grid de accesos directos -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);">
+                <button onclick="openTeamTab('${t.id}','acumulados')" style="background:var(--card2);border:none;padding:16px 12px;cursor:pointer;text-align:left;color:var(--text);">
+                    <div style="font-size:1.4rem;margin-bottom:4px;">📊</div>
+                    <div style="font-size:0.82rem;font-weight:800;">Acumulados</div>
+                    <div style="font-size:0.68rem;color:var(--muted);margin-top:2px;">Stats de temporada</div>
+                </button>
+                <button onclick="${liveSession ? `openTeamTab('${t.id}','sesiones')` : `openSetupForTeam('${t.id}')`}" style="background:var(--card2);border:none;padding:16px 12px;cursor:pointer;text-align:left;color:var(--text);">
+                    <div style="font-size:1.4rem;margin-bottom:4px;">${liveSession ? '🔴' : '▶️'}</div>
+                    <div style="font-size:0.82rem;font-weight:800;">${liveSession ? 'Sesión en curso' : 'Nueva sesión'}</div>
+                    <div style="font-size:0.68rem;color:var(--muted);margin-top:2px;">${liveSession ? 'Continuar tracking' : 'Iniciar tracking'}</div>
+                </button>
+                <button onclick="openTeamTab('${t.id}','jugadores')" style="background:var(--card2);border:none;padding:16px 12px;cursor:pointer;text-align:left;color:var(--text);">
+                    <div style="font-size:1.4rem;margin-bottom:4px;">👥</div>
+                    <div style="font-size:0.82rem;font-weight:800;">Jugadores</div>
+                    <div style="font-size:0.68rem;color:var(--muted);margin-top:2px;">Editar plantilla</div>
+                </button>
+                <button onclick="openTeamTab('${t.id}','acciones')" style="background:var(--card2);border:none;padding:16px 12px;cursor:pointer;text-align:left;color:var(--text);">
+                    <div style="font-size:1.4rem;margin-bottom:4px;">⚡</div>
+                    <div style="font-size:0.82rem;font-weight:800;">Acciones</div>
+                    <div style="font-size:0.68rem;color:var(--muted);margin-top:2px;">${t.actions.length} acciones · editar</div>
+                </button>
+            </div>
         </div>`;
     }).join('');
 }
 
 function openTeam(id) { curTeamId=id; curTab='acumulados'; showView('team'); }
+
+function openTeamTab(id, tab) {
+    curTeamId=id; curTab=tab; showView('team');
+    switchTab(tab, true);
+}
+
+function openSetupForTeam(id) {
+    curTeamId=id; showView('team');
+    openSetup();
+}
 
 function showNewTeamModal() {
     document.getElementById('newTeamInput').value='';
@@ -1029,13 +1102,90 @@ function renderTeam() {
 
 function switchTab(tab, setState=true) {
     if(setState) curTab = tab;
-    ['acumulados','sesiones','jugadores'].forEach(t=>{
+    ['acumulados','sesiones','jugadores','acciones'].forEach(t=>{
         document.getElementById('tab-'+t).classList.toggle('on', t===tab);
         document.getElementById('tc-'+t).classList.toggle('hidden', t!==tab);
     });
     if(tab==='acumulados') renderAcumulados();
     if(tab==='sesiones')   renderSessions();
     if(tab==='jugadores')  renderRoster();
+    if(tab==='acciones')   renderAcciones();
+}
+
+// ── ACCIONES ─────────────────────────────────
+function renderAcciones() {
+    const team = getTeam(curTeamId);
+    const el = document.getElementById('accionesContent');
+    el.innerHTML = `
+        <div style="display:flex;align-items:center;justify-content:space-between;margin:14px 0 10px;">
+            <div class="slabel" style="margin:0;">ACCIONES DEL EQUIPO</div>
+            <button class="btn-gold" style="padding:6px 14px;font-size:0.8rem;" onclick="openNewAction()">+ Nueva</button>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;">
+        ${team.actions.map((a,i) => `
+            <div style="display:flex;align-items:center;gap:10px;padding:13px 14px;border-bottom:${i<team.actions.length-1?'1px solid var(--border)':'none'};">
+                <div style="flex:1;">
+                    <div style="font-size:0.92rem;font-weight:700;">${a.name}</div>
+                    <div style="font-size:0.72rem;color:var(--muted);margin-top:2px;">${a.weight} pts por acción</div>
+                </div>
+                <div style="display:flex;gap:6px;">
+                    <button class="ibtn" onclick="openEditAction('${a.id}')" title="Editar" style="font-size:0.85rem;">✎</button>
+                    <button class="ibtn" onclick="deleteAction('${a.id}')" title="Eliminar" style="font-size:0.85rem;color:var(--danger);border-color:var(--danger);">✕</button>
+                </div>
+            </div>
+        `).join('')}
+        </div>
+        <div style="font-size:0.72rem;color:var(--muted);margin-top:10px;text-align:center;">
+            ${team.actions.length} acciones · Se aplican a todas las sesiones nuevas
+        </div>
+    `;
+}
+
+let _editingActionId = null;
+
+function openNewAction() {
+    _editingActionId = null;
+    document.getElementById('editActionTitle').textContent = 'Nueva acción';
+    document.getElementById('editActionName').value = '';
+    document.getElementById('editActionWeight').value = 20;
+    document.getElementById('editActionWeightVal').textContent = '20';
+    showModal('modal-edit-action');
+}
+
+function openEditAction(aid) {
+    const team = getTeam(curTeamId);
+    const a = team.actions.find(x=>x.id===aid);
+    if(!a) return;
+    _editingActionId = aid;
+    document.getElementById('editActionTitle').textContent = 'Editar acción';
+    document.getElementById('editActionName').value = a.name;
+    document.getElementById('editActionWeight').value = a.weight;
+    document.getElementById('editActionWeightVal').textContent = a.weight;
+    showModal('modal-edit-action');
+}
+
+async function saveEditAction() {
+    const name = document.getElementById('editActionName').value.trim();
+    const weight = parseInt(document.getElementById('editActionWeight').value);
+    if(!name) return;
+    const team = getTeam(curTeamId);
+    if(_editingActionId) {
+        const a = team.actions.find(x=>x.id===_editingActionId);
+        if(a) { a.name=name; a.weight=weight; }
+    } else {
+        team.actions.push({ id: uid(), name, weight });
+    }
+    await saveTeam(team);
+    hideModal('modal-edit-action');
+    renderAcciones();
+}
+
+async function deleteAction(aid) {
+    const team = getTeam(curTeamId);
+    if(team.actions.length <= 1) { alert('El equipo debe tener al menos una acción.'); return; }
+    team.actions = team.actions.filter(a=>a.id!==aid);
+    await saveTeam(team);
+    renderAcciones();
 }
 
 // ── ACUMULADOS ──────────────────────────────
@@ -1633,6 +1783,14 @@ let _initialLoad = true;
     _initialLoad = false;
 })();
 
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  });
+}
 </script>
 </body>
 </html>
