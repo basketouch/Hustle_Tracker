@@ -593,6 +593,9 @@
             </div>
         </div>
         <div class="app-header-right">
+            <button class="ibtn" onclick="promptDeleteTeam()" title="Eliminar equipo" style="color:var(--danger);border-color:var(--danger);">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+            </button>
             <button class="ibtn gold" onclick="openSetup()" title="Nueva sesión">▶</button>
         </div>
     </div>
@@ -840,6 +843,18 @@
     </div>
 </div>
 
+<!-- CONFIRM MODAL -->
+<div id="modal-confirm" class="modal">
+    <div class="mbox">
+        <div class="mbox-title" style="color:var(--danger);">¿Confirmar eliminación?</div>
+        <p id="confirmMsg" style="color:var(--muted);font-size:0.88rem;margin:0 0 16px;"></p>
+        <div class="mactions">
+            <button class="mbtn mbtn-ghost" onclick="hideModal('modal-confirm')">Cancelar</button>
+            <button class="mbtn" style="background:var(--danger);color:#fff;border:none;" onclick="doConfirm()">Eliminar</button>
+        </div>
+    </div>
+</div>
+
 <!-- VIDEO PLAYER MODAL -->
 <div id="modal-video" style="display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,0.92);flex-direction:column;align-items:center;justify-content:center;">
     <div style="width:100%;max-width:480px;padding:0 16px;box-sizing:border-box;">
@@ -992,6 +1007,29 @@ async function saveSession(s) {
     const i = _cache.sessions.findIndex(x=>x.id===s.id);
     i>=0 ? _cache.sessions[i]=s : _cache.sessions.push(s);
     await supa.from('ht_sessions').upsert(sessionToRow(s));
+}
+
+async function dbDeleteTeam(id) {
+    await supa.from('ht_sessions').delete().eq('team_id', id);
+    await supa.from('ht_teams').delete().eq('id', id);
+    _cache.teams    = _cache.teams.filter(t=>t.id!==id);
+    _cache.sessions = _cache.sessions.filter(s=>s.teamId!==id);
+}
+async function dbDeleteSession(id) {
+    await supa.from('ht_sessions').delete().eq('id', id);
+    _cache.sessions = _cache.sessions.filter(s=>s.id!==id);
+}
+
+// ── Confirmación genérica ───────────────────
+let _confirmCb = null;
+function confirmAction(msg, cb) {
+    document.getElementById('confirmMsg').textContent = msg;
+    _confirmCb = cb;
+    showModal('modal-confirm');
+}
+function doConfirm() {
+    hideModal('modal-confirm');
+    if(_confirmCb) { _confirmCb(); _confirmCb = null; }
 }
 
 const uid = () => Date.now().toString(36)+Math.random().toString(36).slice(2,6);
@@ -1390,6 +1428,9 @@ function renderSessions() {
                 <div class="session-card-date">${fmtDate(s.date)}${live?' · <span style="color:#ff9f43">● en vivo</span>':''}</div>
             </div>
             <span class="session-card-score">${top>0?top.toFixed(0):'—'}</span>
+            <button onclick="event.stopPropagation();promptDeleteSession('${s.id}')" style="background:none;border:none;padding:6px;cursor:pointer;color:var(--muted);flex-shrink:0;" title="Eliminar sesión">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+            </button>
         </div>`;
     }).join('');
 }
@@ -1399,6 +1440,29 @@ function openSession(id) {
     const s=getSession(id);
     if(s.status==='live') { selPlayerIdx=null; showView('live'); }
     else { prevView='team'; showView('summary'); }
+}
+
+function promptDeleteSession(id) {
+    const s = getSession(id);
+    const label = s.name || fmtDate(s.date);
+    confirmAction(`Se eliminará "${label}" y todos sus datos. Esta acción no se puede deshacer.`, async () => {
+        showLoading();
+        await dbDeleteSession(id);
+        hideLoading();
+        renderSessions();
+        renderAcumulados();
+    });
+}
+
+function promptDeleteTeam() {
+    const team = getTeam(curTeamId);
+    confirmAction(`Se eliminará el equipo "${team.name}" con todos sus jugadores y sesiones. Esta acción no se puede deshacer.`, async () => {
+        showLoading();
+        await dbDeleteTeam(curTeamId);
+        hideLoading();
+        showView('home');
+        renderHome();
+    });
 }
 
 // ── ROSTER ──────────────────────────────────
