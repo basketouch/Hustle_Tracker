@@ -568,7 +568,8 @@
         <div class="slabel" style="margin-top:4px;">Mis equipos</div>
         <div id="homeTeamsList"></div>
         <div id="homeEmpty" class="empty hidden">
-            Sin equipos.<br>Pulsa <b>+</b> para crear el primero.
+            Sin equipos aún.<br>
+            <button onclick="showNewTeamModal()" class="btn-gold" style="margin-top:14px;padding:12px 24px;">Crear mi primer equipo</button>
         </div>
 
         <!-- ACADEMY -->
@@ -577,7 +578,7 @@
             <!-- Los vídeos se renderizan desde ACADEMY_VIDEOS -->
         </div>
     </div>
-    <button class="fab" onclick="showNewTeamModal()">+</button>
+    <button class="fab" id="fabNewTeam" onclick="showNewTeamModal()">+</button>
 </div>
 
 <!-- ══════════════════════════════════════════════
@@ -875,7 +876,10 @@
             <button class="mbtn mbtn-ghost" onclick="hideModal('modal-edit-team')">Cancelar</button>
             <button class="mbtn mbtn-primary" onclick="saveEditTeam()">Guardar</button>
         </div>
-        <div style="margin-top:8px;border-top:1px solid var(--border);padding-top:12px;">
+        <div style="margin-top:8px;border-top:1px solid var(--border);padding-top:12px;display:flex;flex-direction:column;gap:8px;">
+            <button onclick="hideModal('modal-edit-team');showNewTeamModal()" style="width:100%;background:none;border:1px solid var(--border);color:var(--text);border-radius:10px;padding:11px;font-size:0.84rem;font-weight:700;cursor:pointer;">
+                + Crear nuevo equipo
+            </button>
             <button onclick="hideModal('modal-edit-team');promptDeleteTeam()" style="width:100%;background:none;border:1px solid var(--danger);color:var(--danger);border-radius:10px;padding:11px;font-size:0.84rem;font-weight:700;cursor:pointer;">
                 Eliminar este equipo…
             </button>
@@ -1164,6 +1168,8 @@ function renderHome() {
     const empty = document.getElementById('homeEmpty');
     document.getElementById('homeUserEmail').textContent = curUser?.email || '';
     renderAcademy();
+    // FAB solo visible si no hay equipos
+    document.getElementById('fabNewTeam').style.display = teams.length ? 'none' : 'flex';
     if(!teams.length) { list.innerHTML=''; empty.classList.remove('hidden'); return; }
     empty.classList.add('hidden');
     list.innerHTML = teams.map(t => {
