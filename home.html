@@ -8,6 +8,7 @@
     <!-- PWA -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#FFD700">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Hustle">
@@ -1363,11 +1364,11 @@ function renderHome() {
     document.getElementById('fabNewTeam').style.display = teams.length ? 'none' : 'flex';
     if(!teams.length) { list.innerHTML=''; empty.classList.remove('hidden'); return; }
     empty.classList.add('hidden');
-    list.innerHTML = teams.map(t => {
-        const ts = _cache.sessions.filter(s=>s.teamId===t.id&&s.status==='done');
+    list.innerHTML = teams.map(tm => {
+        const ts = _cache.sessions.filter(s=>s.teamId===tm.id&&s.status==='done');
         const last = [...ts].sort((a,b)=>b.date.localeCompare(a.date))[0];
-        const initial = t.name.charAt(0).toUpperCase();
-        const liveSession = _cache.sessions.find(s=>s.teamId===t.id&&s.status==='live');
+        const initial = tm.name.charAt(0).toUpperCase();
+        const liveSession = _cache.sessions.find(s=>s.teamId===tm.id&&s.status==='live');
         const svgBar   = `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>`;
         const svgPlay  = `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>`;
         const svgLive  = `<svg width="26" height="26" viewBox="0 0 24 24" fill="#ef476f" stroke="#ef476f" stroke-width="2"><circle cx="12" cy="12" r="7"/></svg>`;
@@ -1385,24 +1386,24 @@ function renderHome() {
         <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
             <div class="team-card-initial">${initial}</div>
             <div style="flex:1;">
-                <div class="team-card-name">${t.name}</div>
-                <div class="team-card-meta">${[t.players.length+' jugadores', ts.length+' sesiones', t.season, t.category].filter(Boolean).join(' · ')}${last?' · '+fmtDate(last.date):''}</div>
+                <div class="team-card-name">${tm.name}</div>
+                <div class="team-card-meta">${[tm.players.length+t('players_label'), ts.length+t('sessions_label'), tm.season, tm.category].filter(Boolean).join(' · ')}${last?' · '+fmtDate(last.date):''}</div>
             </div>
             ${liveSession ? `<span style="background:#ef476f;color:#fff;font-size:0.65rem;font-weight:800;padding:4px 10px;border-radius:20px;letter-spacing:0.5px;flex-shrink:0;">${t('en_vivo')}</span>` : ''}
-            <button onclick="event.stopPropagation();curTeamId='${t.id}';openEditTeam()" title="Ajustes del equipo"
+            <button onclick="event.stopPropagation();curTeamId='${tm.id}';openEditTeam()" title="${t('modal_team_settings')}"
                 style="background:none;border:none;color:var(--muted);cursor:pointer;padding:4px;flex-shrink:0;">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
             </button>
         </div>
         <!-- 4 tarjetas en fila -->
         <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px;">
-            ${shortcut(svgBar,  t('shortcut_accumulated'), `openTeamTab('${t.id}','acumulados')`)}
+            ${shortcut(svgBar,  t('shortcut_accumulated'), `openTeamTab('${tm.id}','acumulados')`)}
             ${shortcut(liveSession ? svgLive : svgPlay,
                        liveSession ? t('shortcut_session_live') : t('shortcut_new_session'),
-                       liveSession ? `openTeamTab('${t.id}','sesiones')` : `openSetupForTeam('${t.id}')`,
+                       liveSession ? `openTeamTab('${tm.id}','sesiones')` : `openSetupForTeam('${tm.id}')`,
                        liveSession ? 'rgba(239,71,111,0.1)' : '')}
-            ${shortcut(svgUsers, t('tab_players'), `openTeamTab('${t.id}','jugadores')`)}
-            ${shortcut(svgStar,  t('tab_actions'), `openTeamTab('${t.id}','acciones')`)}
+            ${shortcut(svgUsers, t('tab_players'), `openTeamTab('${tm.id}','jugadores')`)}
+            ${shortcut(svgStar,  t('tab_actions'), `openTeamTab('${tm.id}','acciones')`)}
         </div>`;
     }).join('');
 }
