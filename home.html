@@ -535,16 +535,16 @@
         <div class="auth-title">HUSTLE <span style="color:var(--primary)">TRACKER</span></div>
         <div class="auth-sub">by jorgelorenzo.coach</div>
         <div class="auth-tabs">
-            <div class="auth-tab on" id="auth-tab-login" onclick="switchAuthTab('login')">Entrar</div>
-            <div class="auth-tab" id="auth-tab-register" onclick="switchAuthTab('register')">Crear cuenta</div>
+            <div class="auth-tab on" id="auth-tab-login" onclick="switchAuthTab('login')" data-i18n="auth_login"></div>
+            <div class="auth-tab" id="auth-tab-register" onclick="switchAuthTab('register')" data-i18n="auth_register"></div>
         </div>
         <div class="auth-form">
-            <input type="email" class="minput" id="authEmail" placeholder="Email" autocomplete="email">
-            <input type="password" class="minput" id="authPassword" placeholder="Contraseña" autocomplete="current-password">
+            <input type="email" class="minput" id="authEmail" autocomplete="email" data-i18n-placeholder="auth_email">
+            <input type="password" class="minput" id="authPassword" autocomplete="current-password" data-i18n-placeholder="auth_password">
             <div class="auth-error" id="authError"></div>
-            <button class="btn-gold" id="authBtn" onclick="submitAuth()">Entrar</button>
+            <button class="btn-gold" id="authBtn" onclick="submitAuth()" data-i18n="auth_login"></button>
         </div>
-        <div class="auth-footer">Hustle Tracker · Herramienta defensiva profesional</div>
+        <div class="auth-footer" data-i18n="auth_footer"></div>
     </div>
 </div>
 
@@ -561,19 +561,20 @@
             </div>
         </div>
         <div class="app-header-right">
-            <button class="ibtn" onclick="logout()" title="Cerrar sesión" style="font-size:0.8rem;">⏏</button>
+            <button id="langToggleBtn" onclick="toggleLang()" style="background:none;border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:4px 9px;font-size:0.72rem;font-weight:800;cursor:pointer;letter-spacing:0.5px;"></button>
+            <button class="ibtn" onclick="logout()" title="Sign out" style="font-size:0.8rem;">⏏</button>
         </div>
     </div>
     <div class="scroll">
-        <div class="slabel" style="margin-top:4px;">Mis equipos</div>
+        <div class="slabel" data-i18n="home_my_teams" style="margin-top:4px;"></div>
         <div id="homeTeamsList"></div>
         <div id="homeEmpty" class="empty hidden">
-            Sin equipos aún.<br>
-            <button onclick="showNewTeamModal()" class="btn-gold" style="margin-top:14px;padding:12px 24px;">Crear mi primer equipo</button>
+            <span data-i18n="home_empty"></span><br>
+            <button onclick="showNewTeamModal()" class="btn-gold" data-i18n="home_create_first" style="margin-top:14px;padding:12px 24px;"></button>
         </div>
 
         <!-- ACADEMY -->
-        <div class="slabel" style="margin-top:4px;">Hustle Academy</div>
+        <div class="slabel" data-i18n="home_academy" style="margin-top:4px;"></div>
         <div id="academyGrid" class="academy-grid" style="margin-bottom:16px;">
             <!-- Los vídeos se renderizan desde ACADEMY_VIDEOS -->
         </div>
@@ -598,10 +599,10 @@
         </div>
     </div>
     <div class="tabs">
-        <div class="tab on" id="tab-acumulados" onclick="switchTab('acumulados')">Acumulados</div>
-        <div class="tab" id="tab-sesiones" onclick="switchTab('sesiones')">Sesiones</div>
-        <div class="tab" id="tab-jugadores" onclick="switchTab('jugadores')">Jugadores</div>
-        <div class="tab" id="tab-acciones" onclick="switchTab('acciones')">Acciones</div>
+        <div class="tab on" id="tab-acumulados" onclick="switchTab('acumulados')" data-i18n="tab_accumulated"></div>
+        <div class="tab" id="tab-sesiones" onclick="switchTab('sesiones')" data-i18n="tab_sessions"></div>
+        <div class="tab" id="tab-jugadores" onclick="switchTab('jugadores')" data-i18n="tab_players"></div>
+        <div class="tab" id="tab-acciones" onclick="switchTab('acciones')" data-i18n="tab_actions"></div>
     </div>
     <div class="scroll" style="padding-top:4px;">
 
@@ -612,9 +613,9 @@
 
         <!-- TAB: SESIONES -->
         <div id="tc-sesiones" class="hidden">
-            <div class="slabel">Historial</div>
+            <div class="slabel" data-i18n="sessions_history"></div>
             <div id="sessionsList"></div>
-            <div id="sessionsEmpty" class="empty hidden">Sin sesiones aún.<br>Pulsa ▶ para iniciar una.</div>
+            <div id="sessionsEmpty" class="empty hidden" data-i18n="sessions_empty"></div>
         </div>
 
         <!-- TAB: ACCIONES -->
@@ -628,11 +629,11 @@
             <div id="rosterCards"></div>
             <!-- Vista edición -->
             <div id="rosterEdit" class="hidden">
-                <div class="slabel" style="margin-top:4px;">Número nombre (uno por línea)</div>
-                <textarea id="rosterTA" class="roster-area" placeholder="4 Raul&#10;5 Jose&#10;7 Marc"></textarea>
+                <div class="slabel" data-i18n="roster_hint" style="margin-top:4px;"></div>
+                <textarea id="rosterTA" class="roster-area" data-i18n-placeholder="roster_placeholder"></textarea>
                 <div style="display:flex;gap:8px;margin-top:10px;">
-                    <button onclick="cancelRosterEdit()" class="btn-dark" style="flex:1;">Cancelar</button>
-                    <button onclick="saveRoster()" class="btn-gold" style="flex:2;" id="saveRosterBtn">Guardar plantilla</button>
+                    <button onclick="cancelRosterEdit()" class="btn-dark" data-i18n="btn_cancel" style="flex:1;"></button>
+                    <button onclick="saveRoster()" class="btn-gold" data-i18n="roster_save" style="flex:2;" id="saveRosterBtn"></button>
                 </div>
             </div>
         </div>
@@ -665,31 +666,31 @@
         <div class="app-header-left">
             <button class="back-btn" onclick="showView('team')">‹</button>
             <div>
-                <div class="app-name">Nueva Sesión</div>
+                <div class="app-name" data-i18n="setup_title"></div>
                 <div class="app-sub" id="setupTeamName"></div>
             </div>
         </div>
     </div>
     <div class="scroll" style="padding-bottom:80px;">
-        <div class="slabel" style="margin-top:4px;">Tipo</div>
+        <div class="slabel" data-i18n="setup_type" style="margin-top:4px;"></div>
         <div class="type-toggle">
-            <div class="type-btn on-t" id="type-t" onclick="setType('entrenamiento')">Entrenamiento</div>
-            <div class="type-btn" id="type-p" onclick="setType('partido')">Partido</div>
+            <div class="type-btn on-t" id="type-t" onclick="setType('entrenamiento')" data-i18n="setup_training"></div>
+            <div class="type-btn" id="type-p" onclick="setType('partido')" data-i18n="setup_game"></div>
         </div>
-        <div class="slabel">Fecha</div>
+        <div class="slabel" data-i18n="setup_date"></div>
         <input type="date" class="minput" id="setupDate">
-        <div class="slabel">Nombre (opcional)</div>
-        <input type="text" class="minput" id="setupSessionName" placeholder="Ej: Bloque defensivo semana 3">
-        <div class="slabel">Jugadores</div>
+        <div class="slabel" data-i18n="setup_name_label"></div>
+        <input type="text" class="minput" id="setupSessionName" data-i18n-placeholder="setup_name_placeholder">
+        <div class="slabel" data-i18n="tab_players"></div>
         <div class="lcard">
             <div id="setupPlayers"></div>
             <div style="padding:11px 14px;border-top:1px solid var(--border);">
-                <button onclick="showModal('modal-guest')" style="background:none;border:none;color:var(--primary);font-size:0.84rem;font-weight:800;cursor:pointer;">+ Jugador invitado</button>
+                <button onclick="showModal('modal-guest')" style="background:none;border:none;color:var(--primary);font-size:0.84rem;font-weight:800;cursor:pointer;" data-i18n="setup_guest_btn"></button>
             </div>
         </div>
     </div>
     <div style="position:fixed;bottom:0;left:0;width:100%;padding:10px 16px;background:#0d0d0d;border-top:1px solid var(--border);z-index:100;">
-        <button class="btn-gold" onclick="startSession()">Empezar sesión</button>
+        <button class="btn-gold" onclick="startSession()" data-i18n="setup_start_btn"></button>
     </div>
 </div>
 
@@ -712,17 +713,17 @@
     </div>
     <div class="live-split">
         <div class="live-col-l">
-            <div class="col-lbl">Jugadores</div>
+            <div class="col-lbl" data-i18n="tab_players"></div>
             <div id="livePlayers"></div>
         </div>
         <div class="live-col-r">
-            <div class="col-lbl">Acciones</div>
+            <div class="col-lbl" data-i18n="tab_actions"></div>
             <div class="act-grid" id="liveActions"></div>
         </div>
     </div>
     <div class="live-foot">
-        <div id="liveStatus" class="status-pill">Selecciona jugador…</div>
-        <button class="btn-gold" onclick="finishSession()">Finalizar sesión</button>
+        <div id="liveStatus" class="status-pill"></div>
+        <button class="btn-gold" onclick="finishSession()" data-i18n="live_finish"></button>
     </div>
 </div>
 
@@ -734,7 +735,7 @@
         <div class="app-header-left">
             <button class="back-btn" onclick="showView(prevView==='home'?'home':prevView);if(prevView==='home')renderHome()">‹</button>
             <div>
-                <div class="app-name">Resumen</div>
+                <div class="app-name" data-i18n="summary_title"></div>
                 <div class="app-sub" id="sumSub"></div>
             </div>
         </div>
@@ -747,13 +748,13 @@
                 <div class="sum-date" id="sumDate"></div>
             </div>
             <table class="sum-table">
-                <thead><tr><th width="36">#</th><th>Jugador</th><th style="text-align:right;">VAL</th></tr></thead>
+                <thead><tr><th width="36">#</th><th data-i18n="col_player"></th><th style="text-align:right;">VAL</th></tr></thead>
                 <tbody id="sumBody"></tbody>
             </table>
         </div>
         <div style="margin-top:20px;display:flex;flex-direction:column;gap:10px;">
-            <button class="btn-gold" onclick="goToTeamAnalysis()" style="font-size:0.95rem;">Ver análisis del equipo</button>
-            <button class="btn-dark" onclick="showView('home');renderHome()">Ir al inicio</button>
+            <button class="btn-gold" onclick="goToTeamAnalysis()" data-i18n="summary_team_analysis" style="font-size:0.95rem;"></button>
+            <button class="btn-dark" onclick="showView('home');renderHome()" data-i18n="summary_go_home"></button>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
                 <button onclick="exportPNG()" style="background:none;border:1px solid var(--border);border-radius:10px;padding:13px;color:var(--muted);font-size:0.82rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
@@ -786,12 +787,12 @@
     </div>
     <table class="print-table">
         <thead>
-            <tr><th width="40">#</th><th width="40">Nº</th><th>Jugador</th><th style="text-align:right;">Valoración</th></tr>
+            <tr><th width="40">#</th><th width="40">Nº</th><th data-i18n="print_col_player"></th><th style="text-align:right;" data-i18n="print_col_rating"></th></tr>
         </thead>
         <tbody id="printBody"></tbody>
     </table>
     <div class="print-footer">
-        <span>Hustle Tracker — Herramienta de análisis defensivo</span>
+        <span data-i18n="print_footer"></span>
         <span id="printFooterDate"></span>
     </div>
 </div>
@@ -801,51 +802,51 @@
 ══════════════════════════════════════════════ -->
 <div id="modal-new-team" class="modal">
     <div class="mbox">
-        <div class="mbox-title">Nuevo equipo</div>
-        <input type="text" class="minput" id="newTeamInput" placeholder="Nombre del equipo">
+        <div class="mbox-title" data-i18n="modal_new_team"></div>
+        <input type="text" class="minput" id="newTeamInput" data-i18n-placeholder="modal_new_team_placeholder">
         <div class="mactions">
-            <button class="mbtn mbtn-ghost" onclick="hideModal('modal-new-team')">Cancelar</button>
-            <button class="mbtn mbtn-primary" onclick="createTeam()">Crear</button>
+            <button class="mbtn mbtn-ghost" onclick="hideModal('modal-new-team')" data-i18n="btn_cancel"></button>
+            <button class="mbtn mbtn-primary" onclick="createTeam()" data-i18n="btn_create"></button>
         </div>
     </div>
 </div>
 
 <div id="modal-guest" class="modal">
     <div class="mbox">
-        <div class="mbox-title">Jugador invitado</div>
-        <div style="font-size:0.78rem;color:var(--muted);margin-bottom:10px;">Solo para esta sesión</div>
+        <div class="mbox-title" data-i18n="modal_guest"></div>
+        <div style="font-size:0.78rem;color:var(--muted);margin-bottom:10px;" data-i18n="modal_guest_sub"></div>
         <div style="display:flex;gap:8px;">
             <input type="number" class="minput" id="guestNum" placeholder="#" style="width:68px;flex-shrink:0;">
-            <input type="text" class="minput" id="guestName" placeholder="Nombre" style="flex:1;">
+            <input type="text" class="minput" id="guestName" data-i18n-placeholder="modal_guest_name" style="flex:1;">
         </div>
         <div class="mactions">
-            <button class="mbtn mbtn-ghost" onclick="hideModal('modal-guest')">Cancelar</button>
-            <button class="mbtn mbtn-primary" onclick="addGuest()">Añadir</button>
+            <button class="mbtn mbtn-ghost" onclick="hideModal('modal-guest')" data-i18n="btn_cancel"></button>
+            <button class="mbtn mbtn-primary" onclick="addGuest()" data-i18n="btn_add"></button>
         </div>
     </div>
 </div>
 
 <div id="modal-edit-player" class="modal">
     <div class="mbox">
-        <div class="mbox-title">Editar jugador</div>
+        <div class="mbox-title" data-i18n="modal_edit_player"></div>
         <div style="display:flex;gap:8px;">
             <input type="number" class="minput" id="editPlayerNum" placeholder="#" style="width:72px;flex-shrink:0;">
-            <input type="text" class="minput" id="editPlayerName" placeholder="Nombre" style="flex:1;">
+            <input type="text" class="minput" id="editPlayerName" data-i18n-placeholder="modal_player_name" style="flex:1;">
         </div>
         <div class="mactions">
-            <button class="mbtn mbtn-ghost" onclick="hideModal('modal-edit-player')">Cancelar</button>
-            <button class="mbtn mbtn-primary" onclick="saveEditPlayer()">Guardar</button>
+            <button class="mbtn mbtn-ghost" onclick="hideModal('modal-edit-player')" data-i18n="btn_cancel"></button>
+            <button class="mbtn mbtn-primary" onclick="saveEditPlayer()" data-i18n="btn_save"></button>
         </div>
     </div>
 </div>
 
 <div id="modal-finish" class="modal">
     <div class="mbox">
-        <div class="mbox-title">¿Finalizar sesión?</div>
-        <p style="color:var(--muted);font-size:0.88rem;margin:0 0 14px;">Los datos se guardarán en el historial del equipo.</p>
+        <div class="mbox-title" data-i18n="modal_finish_title"></div>
+        <p style="color:var(--muted);font-size:0.88rem;margin:0 0 14px;" data-i18n="modal_finish_body"></p>
         <div class="mactions">
-            <button class="mbtn mbtn-ghost" onclick="hideModal('modal-finish')">Cancelar</button>
-            <button class="mbtn mbtn-primary" onclick="confirmFinish()">Finalizar</button>
+            <button class="mbtn mbtn-ghost" onclick="hideModal('modal-finish')" data-i18n="btn_cancel"></button>
+            <button class="mbtn mbtn-primary" onclick="confirmFinish()" data-i18n="btn_finish"></button>
         </div>
     </div>
 </div>
@@ -853,36 +854,32 @@
 <!-- EDIT TEAM MODAL -->
 <div id="modal-edit-team" class="modal">
     <div class="mbox">
-        <div class="mbox-title">Ajustes del equipo</div>
+        <div class="mbox-title" data-i18n="modal_team_settings"></div>
         <div style="display:flex;flex-direction:column;gap:8px;">
             <div>
-                <div style="font-size:0.7rem;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px;">Nombre del equipo</div>
-                <input type="text" class="minput" id="editTeamName" placeholder="Nombre">
+                <div style="font-size:0.7rem;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px;" data-i18n="field_team_name"></div>
+                <input type="text" class="minput" id="editTeamName" data-i18n-placeholder="modal_new_team_placeholder">
             </div>
             <div>
-                <div style="font-size:0.7rem;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px;">Temporada</div>
-                <input type="text" class="minput" id="editTeamSeason" placeholder="Ej: 2025/2026">
+                <div style="font-size:0.7rem;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px;" data-i18n="field_season"></div>
+                <input type="text" class="minput" id="editTeamSeason" data-i18n-placeholder="field_season_placeholder">
             </div>
             <div>
-                <div style="font-size:0.7rem;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px;">Categoría</div>
-                <input type="text" class="minput" id="editTeamCategory" placeholder="Ej: Sub-18, Senior, ACB...">
+                <div style="font-size:0.7rem;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px;" data-i18n="field_category"></div>
+                <input type="text" class="minput" id="editTeamCategory" data-i18n-placeholder="field_category_placeholder">
             </div>
             <div>
-                <div style="font-size:0.7rem;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px;">Notas</div>
-                <input type="text" class="minput" id="editTeamNotes" placeholder="Notas opcionales">
+                <div style="font-size:0.7rem;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px;" data-i18n="field_notes"></div>
+                <input type="text" class="minput" id="editTeamNotes" data-i18n-placeholder="field_notes_placeholder">
             </div>
         </div>
         <div class="mactions">
-            <button class="mbtn mbtn-ghost" onclick="hideModal('modal-edit-team')">Cancelar</button>
-            <button class="mbtn mbtn-primary" onclick="saveEditTeam()">Guardar</button>
+            <button class="mbtn mbtn-ghost" onclick="hideModal('modal-edit-team')" data-i18n="btn_cancel"></button>
+            <button class="mbtn mbtn-primary" onclick="saveEditTeam()" data-i18n="btn_save"></button>
         </div>
         <div style="margin-top:8px;border-top:1px solid var(--border);padding-top:12px;display:flex;flex-direction:column;gap:8px;">
-            <button onclick="hideModal('modal-edit-team');showNewTeamModal()" style="width:100%;background:none;border:1px solid var(--border);color:var(--text);border-radius:10px;padding:11px;font-size:0.84rem;font-weight:700;cursor:pointer;">
-                + Crear nuevo equipo
-            </button>
-            <button onclick="hideModal('modal-edit-team');promptDeleteTeam()" style="width:100%;background:none;border:1px solid var(--danger);color:var(--danger);border-radius:10px;padding:11px;font-size:0.84rem;font-weight:700;cursor:pointer;">
-                Eliminar este equipo…
-            </button>
+            <button onclick="hideModal('modal-edit-team');showNewTeamModal()" data-i18n="btn_create_new_team" style="width:100%;background:none;border:1px solid var(--border);color:var(--text);border-radius:10px;padding:11px;font-size:0.84rem;font-weight:700;cursor:pointer;"></button>
+            <button onclick="hideModal('modal-edit-team');promptDeleteTeam()" data-i18n="btn_delete_team" style="width:100%;background:none;border:1px solid var(--danger);color:var(--danger);border-radius:10px;padding:11px;font-size:0.84rem;font-weight:700;cursor:pointer;"></button>
         </div>
     </div>
 </div>
@@ -890,11 +887,11 @@
 <!-- CONFIRM MODAL -->
 <div id="modal-confirm" class="modal">
     <div class="mbox">
-        <div class="mbox-title" style="color:var(--danger);">¿Confirmar eliminación?</div>
+        <div class="mbox-title" data-i18n="modal_confirm_title" style="color:var(--danger);"></div>
         <p id="confirmMsg" style="color:var(--muted);font-size:0.88rem;margin:0 0 16px;"></p>
         <div class="mactions">
-            <button class="mbtn mbtn-ghost" onclick="hideModal('modal-confirm')">Cancelar</button>
-            <button class="mbtn" style="background:var(--danger);color:#fff;border:none;" onclick="doConfirm()">Eliminar</button>
+            <button class="mbtn mbtn-ghost" onclick="hideModal('modal-confirm')" data-i18n="btn_cancel"></button>
+            <button class="mbtn" style="background:var(--danger);color:#fff;border:none;" onclick="doConfirm()" data-i18n="btn_delete"></button>
         </div>
     </div>
 </div>
@@ -914,10 +911,10 @@
 
 <div id="modal-edit-action" class="modal">
     <div class="mbox">
-        <div class="mbox-title" id="editActionTitle">Nueva acción</div>
-        <input type="text" class="minput" id="editActionName" placeholder="Nombre de la acción" maxlength="30">
+        <div class="mbox-title" id="editActionTitle"></div>
+        <input type="text" class="minput" id="editActionName" maxlength="30" data-i18n-placeholder="modal_action_name">
         <div style="margin-top:10px;">
-            <div style="font-size:0.75rem;color:var(--muted);margin-bottom:6px;">PUNTOS POR ACCIÓN</div>
+            <div style="font-size:0.75rem;color:var(--muted);margin-bottom:6px;" data-i18n="modal_action_pts"></div>
             <div style="display:flex;align-items:center;gap:12px;">
                 <input type="range" id="editActionWeight" min="5" max="100" step="5" value="20"
                     oninput="document.getElementById('editActionWeightVal').textContent=this.value"
@@ -939,6 +936,200 @@
 // ════════════════════════════════════════════
 // DATA
 // ════════════════════════════════════════════
+// ════════════════════════════════════════════
+// i18n
+// ════════════════════════════════════════════
+let _lang = localStorage.getItem('ht_lang') || 'en';
+
+const LANG = {
+  en: {
+    // Auth
+    auth_login: 'Sign in', auth_register: 'Create account',
+    auth_email: 'Email', auth_password: 'Password',
+    auth_footer: 'Hustle Tracker · Professional defensive tool',
+    auth_error_empty: 'Enter your email and password.',
+    auth_success_register: 'Account created. Check your email to confirm.',
+    // Home
+    home_my_teams: 'My teams', home_empty: 'No teams yet.',
+    home_create_first: 'Create my first team', home_academy: 'Hustle Academy',
+    // Tabs
+    tab_accumulated: 'Accumulated', tab_sessions: 'Sessions',
+    tab_players: 'Players', tab_actions: 'Actions',
+    // Sessions
+    sessions_history: 'History',
+    sessions_empty: 'No sessions yet.\nPress ▶ to start one.',
+    session_live: '● live', session_badge_t: 'Trn.', session_badge_p: 'Gme.',
+    // Roster
+    roster_hint: 'Number name (one per line)',
+    roster_placeholder: '4 John\n5 Mike\n7 Marc',
+    roster_save: 'Save roster', roster_edit: 'Edit',
+    // Setup
+    setup_title: 'New Session', setup_type: 'Type',
+    setup_training: 'Training', setup_game: 'Game',
+    setup_date: 'Date', setup_name_label: 'Name (optional)',
+    setup_name_placeholder: 'E.g.: Defensive block week 3',
+    setup_guest_btn: '+ Guest player', setup_start_btn: 'Start session',
+    setup_alert_no_player: 'Select at least one player.',
+    // Live
+    live_finish: 'Finish session',
+    live_select_player: 'Select player…',
+    live_warning_select: '⚠ Select a player',
+    live_live_badge: 'LIVE',
+    // Summary
+    summary_title: 'Summary', col_player: 'Player',
+    summary_team_analysis: 'View team analysis', summary_go_home: 'Go to home',
+    // Print
+    print_footer: 'Hustle Tracker — Defensive analysis tool',
+    print_generated: 'Generated on ',
+    print_col_player: 'Player', print_col_rating: 'Rating',
+    // Modals
+    modal_new_team: 'New team', modal_new_team_placeholder: 'Team name',
+    modal_guest: 'Guest player', modal_guest_sub: 'This session only',
+    modal_guest_name: 'Name', modal_edit_player: 'Edit player',
+    modal_player_name: 'Name', modal_finish_title: 'Finish session?',
+    modal_finish_body: 'Data will be saved in the team history.',
+    modal_team_settings: 'Team settings',
+    modal_confirm_title: 'Confirm deletion?',
+    modal_action_new: 'New action', modal_action_edit: 'Edit action',
+    modal_action_name: 'Action name', modal_action_pts: 'POINTS PER ACTION',
+    // Fields
+    field_team_name: 'Team name', field_season: 'Season',
+    field_season_placeholder: 'E.g.: 2025/2026',
+    field_category: 'Category', field_category_placeholder: 'E.g.: U18, Senior...',
+    field_notes: 'Notes', field_notes_placeholder: 'Optional notes',
+    // Buttons
+    btn_cancel: 'Cancel', btn_save: 'Save', btn_create: 'Create',
+    btn_add: 'Add', btn_finish: 'Finish', btn_delete: 'Delete',
+    btn_create_new_team: '+ Create new team', btn_delete_team: 'Delete this team…',
+    // Acumulados
+    acum_filter: 'Filter by date', acum_filter_active: 'Showing filtered sessions · ',
+    acum_filter_total: 'Total without filter: ', acum_empty_range: 'No sessions in the selected range.',
+    acum_sessions: 'Sessions', acum_trainings: 'Trainings', acum_games: 'Games',
+    acum_ranking: 'Season ranking', acum_trn_vs_gme: 'Training vs Game',
+    acum_avg: '(avg. per session)', acum_trn_short: 'TRN', acum_gme_short: 'GME',
+    acum_top_actions: 'Most recorded actions', acum_actions_footer_suffix: ' actions · Applied to new sessions',
+    // Actions tab
+    actions_title: 'TEAM ACTIONS', actions_new: '+ New',
+    actions_pts_suffix: ' pts per action', actions_min_one: 'The team must have at least one action.',
+    // Shortcuts home
+    shortcut_accumulated: 'Accumu­lated', shortcut_new_session: 'New session',
+    shortcut_session_live: 'Live session', shortcut_continue: 'Continue tracking',
+    shortcut_start: 'Start tracking', shortcut_season_stats: 'Season stats',
+    shortcut_edit_roster: 'Edit roster', shortcut_edit_actions: 'Edit',
+    // Player
+    player_season_total: 'Season total', player_sessions: 'Sessions',
+    player_avg_trn: 'Avg. Training', player_avg_gme: 'Avg. Game',
+    player_stats: 'Stats', player_actions: 'Actions',
+    player_evolution: 'Evolution by session', player_trn_short: 'Trn.', player_gme_short: 'Gme.',
+    // Delete confirms
+    confirm_delete_session: (label) => `"${label}" and all its data will be deleted. This cannot be undone.`,
+    confirm_delete_team: (name) => `Team "${name}" with all players and sessions will be deleted. This cannot be undone.`,
+    // Misc
+    en_vivo: 'LIVE', sessions_label: ' sessions', players_label: ' players',
+    filter_ok: 'OK',
+  },
+  es: {
+    auth_login: 'Entrar', auth_register: 'Crear cuenta',
+    auth_email: 'Email', auth_password: 'Contraseña',
+    auth_footer: 'Hustle Tracker · Herramienta defensiva profesional',
+    auth_error_empty: 'Rellena email y contraseña.',
+    auth_success_register: 'Cuenta creada. Revisa tu email para confirmar.',
+    home_my_teams: 'Mis equipos', home_empty: 'Sin equipos aún.',
+    home_create_first: 'Crear mi primer equipo', home_academy: 'Hustle Academy',
+    tab_accumulated: 'Acumulados', tab_sessions: 'Sesiones',
+    tab_players: 'Jugadores', tab_actions: 'Acciones',
+    sessions_history: 'Historial',
+    sessions_empty: 'Sin sesiones aún.\nPulsa ▶ para iniciar una.',
+    session_live: '● en vivo', session_badge_t: 'Ent.', session_badge_p: 'Part.',
+    roster_hint: 'Número nombre (uno por línea)',
+    roster_placeholder: '4 Raul\n5 Jose\n7 Marc',
+    roster_save: 'Guardar plantilla', roster_edit: 'Editar',
+    setup_title: 'Nueva Sesión', setup_type: 'Tipo',
+    setup_training: 'Entrenamiento', setup_game: 'Partido',
+    setup_date: 'Fecha', setup_name_label: 'Nombre (opcional)',
+    setup_name_placeholder: 'Ej: Bloque defensivo semana 3',
+    setup_guest_btn: '+ Jugador invitado', setup_start_btn: 'Empezar sesión',
+    setup_alert_no_player: 'Selecciona al menos un jugador.',
+    live_finish: 'Finalizar sesión',
+    live_select_player: 'Selecciona jugador…',
+    live_warning_select: '⚠ Selecciona un jugador',
+    live_live_badge: 'EN VIVO',
+    summary_title: 'Resumen', col_player: 'Jugador',
+    summary_team_analysis: 'Ver análisis del equipo', summary_go_home: 'Ir al inicio',
+    print_footer: 'Hustle Tracker — Herramienta de análisis defensivo',
+    print_generated: 'Generado el ',
+    print_col_player: 'Jugador', print_col_rating: 'Valoración',
+    modal_new_team: 'Nuevo equipo', modal_new_team_placeholder: 'Nombre del equipo',
+    modal_guest: 'Jugador invitado', modal_guest_sub: 'Solo para esta sesión',
+    modal_guest_name: 'Nombre', modal_edit_player: 'Editar jugador',
+    modal_player_name: 'Nombre', modal_finish_title: '¿Finalizar sesión?',
+    modal_finish_body: 'Los datos se guardarán en el historial del equipo.',
+    modal_team_settings: 'Ajustes del equipo',
+    modal_confirm_title: '¿Confirmar eliminación?',
+    modal_action_new: 'Nueva acción', modal_action_edit: 'Editar acción',
+    modal_action_name: 'Nombre de la acción', modal_action_pts: 'PUNTOS POR ACCIÓN',
+    field_team_name: 'Nombre del equipo', field_season: 'Temporada',
+    field_season_placeholder: 'Ej: 2025/2026',
+    field_category: 'Categoría', field_category_placeholder: 'Ej: Sub-18, Senior, ACB...',
+    field_notes: 'Notas', field_notes_placeholder: 'Notas opcionales',
+    btn_cancel: 'Cancelar', btn_save: 'Guardar', btn_create: 'Crear',
+    btn_add: 'Añadir', btn_finish: 'Finalizar', btn_delete: 'Eliminar',
+    btn_create_new_team: '+ Crear nuevo equipo', btn_delete_team: 'Eliminar este equipo…',
+    acum_filter: 'Filtrar por fecha', acum_filter_active: 'Mostrando sesiones filtradas · ',
+    acum_filter_total: 'Total sin filtro: ', acum_empty_range: 'Sin sesiones en el rango seleccionado.',
+    acum_sessions: 'Sesiones', acum_trainings: 'Entrenos', acum_games: 'Partidos',
+    acum_ranking: 'Ranking de temporada', acum_trn_vs_gme: 'Entrenamiento vs Partido',
+    acum_avg: '(media por sesión)', acum_trn_short: 'ENT', acum_gme_short: 'PAR',
+    acum_top_actions: 'Acciones más registradas', acum_actions_footer_suffix: ' acciones · Se aplican a nuevas sesiones',
+    actions_title: 'ACCIONES DEL EQUIPO', actions_new: '+ Nueva',
+    actions_pts_suffix: ' pts por acción', actions_min_one: 'El equipo debe tener al menos una acción.',
+    shortcut_accumulated: 'Acumula­dos', shortcut_new_session: 'Nueva sesión',
+    shortcut_session_live: 'Sesión en curso', shortcut_continue: 'Continuar tracking',
+    shortcut_start: 'Iniciar tracking', shortcut_season_stats: 'Stats de temporada',
+    shortcut_edit_roster: 'Editar plantilla', shortcut_edit_actions: 'editar',
+    player_season_total: 'Total temporada', player_sessions: 'Sesiones',
+    player_avg_trn: 'Media Ent.', player_avg_gme: 'Media Part.',
+    player_stats: 'Estadísticas', player_actions: 'Acciones',
+    player_evolution: 'Evolución por sesión', player_trn_short: 'Ent.', player_gme_short: 'Part.',
+    confirm_delete_session: (label) => `Se eliminará "${label}" y todos sus datos. Esta acción no se puede deshacer.`,
+    confirm_delete_team: (name) => `Se eliminará el equipo "${name}" con todos sus jugadores y sesiones. Esta acción no se puede deshacer.`,
+    en_vivo: 'EN VIVO', sessions_label: ' sesiones', players_label: ' jugadores',
+    filter_ok: 'OK',
+  }
+};
+
+function t(key) { return (LANG[_lang] || LANG.en)[key] || LANG.en[key] || key; }
+
+function applyLang() {
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        const val = t(key);
+        if(typeof val === 'string') el.textContent = val;
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        el.placeholder = t(el.getAttribute('data-i18n-placeholder'));
+    });
+    // Toggle button shows the OTHER language
+    const btn = document.getElementById('langToggleBtn');
+    if(btn) btn.textContent = _lang === 'en' ? 'ES' : 'EN';
+    // Live status default
+    const ls = document.getElementById('liveStatus');
+    if(ls && !ls.textContent) ls.textContent = t('live_select_player');
+}
+
+function toggleLang() {
+    _lang = _lang === 'en' ? 'es' : 'en';
+    localStorage.setItem('ht_lang', _lang);
+    applyLang();
+    // Re-render current view to translate dynamic content
+    const activeView = document.querySelector('.view.active')?.id;
+    if(activeView === 'view-home')   renderHome();
+    if(activeView === 'view-team')   switchTab(curTab, false);
+    if(activeView === 'view-setup')  renderSetupPlayers();
+    if(activeView === 'view-live')   renderLivePlayers();
+    if(activeView === 'view-player') openPlayer(curPlayerId);
+}
+
 // ── ACADEMY VIDEOS ── Edita esta lista para añadir/quitar vídeos
 const ACADEMY_VIDEOS = [
     { id: 'pE02JA7DeIY', title: 'Cómo usar Hustle Tracker',   label: 'TUTORIAL' },
@@ -1118,7 +1309,7 @@ async function submitAuth() {
     const pass  = document.getElementById('authPassword').value;
     const errEl = document.getElementById('authError');
     errEl.textContent = '';
-    if(!email || !pass) { errEl.textContent = 'Rellena email y contraseña.'; return; }
+    if(!email || !pass) { errEl.textContent = t('auth_error_empty'); return; }
     showLoading();
     let error;
     if(_authMode === 'login') {
@@ -1130,7 +1321,7 @@ async function submitAuth() {
     if(error) { errEl.textContent = error.message; return; }
     if(_authMode === 'register') {
         errEl.style.color = 'var(--selected)';
-        errEl.textContent = 'Cuenta creada. Revisa tu email para confirmar.';
+        errEl.textContent = t('auth_success_register');
     }
 }
 
@@ -1197,7 +1388,7 @@ function renderHome() {
                 <div class="team-card-name">${t.name}</div>
                 <div class="team-card-meta">${[t.players.length+' jugadores', ts.length+' sesiones', t.season, t.category].filter(Boolean).join(' · ')}${last?' · '+fmtDate(last.date):''}</div>
             </div>
-            ${liveSession ? `<span style="background:#ef476f;color:#fff;font-size:0.65rem;font-weight:800;padding:4px 10px;border-radius:20px;letter-spacing:0.5px;flex-shrink:0;">EN VIVO</span>` : ''}
+            ${liveSession ? `<span style="background:#ef476f;color:#fff;font-size:0.65rem;font-weight:800;padding:4px 10px;border-radius:20px;letter-spacing:0.5px;flex-shrink:0;">${t('en_vivo')}</span>` : ''}
             <button onclick="event.stopPropagation();curTeamId='${t.id}';openEditTeam()" title="Ajustes del equipo"
                 style="background:none;border:none;color:var(--muted);cursor:pointer;padding:4px;flex-shrink:0;">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
@@ -1205,13 +1396,13 @@ function renderHome() {
         </div>
         <!-- 4 tarjetas en fila -->
         <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px;">
-            ${shortcut(svgBar,  'Acumula&shy;dos', `openTeamTab('${t.id}','acumulados')`)}
+            ${shortcut(svgBar,  t('shortcut_accumulated'), `openTeamTab('${t.id}','acumulados')`)}
             ${shortcut(liveSession ? svgLive : svgPlay,
-                       liveSession ? 'En curso' : 'Nueva sesión',
+                       liveSession ? t('shortcut_session_live') : t('shortcut_new_session'),
                        liveSession ? `openTeamTab('${t.id}','sesiones')` : `openSetupForTeam('${t.id}')`,
                        liveSession ? 'rgba(239,71,111,0.1)' : '')}
-            ${shortcut(svgUsers, 'Jugadores', `openTeamTab('${t.id}','jugadores')`)}
-            ${shortcut(svgStar,  'Acciones',  `openTeamTab('${t.id}','acciones')`)}
+            ${shortcut(svgUsers, t('tab_players'), `openTeamTab('${t.id}','jugadores')`)}
+            ${shortcut(svgStar,  t('tab_actions'), `openTeamTab('${t.id}','acciones')`)}
         </div>`;
     }).join('');
 }
@@ -1277,15 +1468,15 @@ function renderAcciones() {
     const el = document.getElementById('accionesContent');
     el.innerHTML = `
         <div style="display:flex;align-items:center;justify-content:space-between;margin:14px 0 10px;">
-            <div class="slabel" style="margin:0;">ACCIONES DEL EQUIPO</div>
-            <button class="btn-gold" style="padding:6px 14px;font-size:0.8rem;" onclick="openNewAction()">+ Nueva</button>
+            <div class="slabel" style="margin:0;">${t('actions_title')}</div>
+            <button class="btn-gold" style="padding:6px 14px;font-size:0.8rem;" onclick="openNewAction()">${t('actions_new')}</button>
         </div>
         <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;">
         ${team.actions.map((a,i) => `
             <div style="display:flex;align-items:center;gap:10px;padding:13px 14px;border-bottom:${i<team.actions.length-1?'1px solid var(--border)':'none'};">
                 <div style="flex:1;">
                     <div style="font-size:0.92rem;font-weight:700;">${a.name}</div>
-                    <div style="font-size:0.72rem;color:var(--muted);margin-top:2px;">${a.weight} pts por acción</div>
+                    <div style="font-size:0.72rem;color:var(--muted);margin-top:2px;">${a.weight}${t('actions_pts_suffix')}</div>
                 </div>
                 <div style="display:flex;gap:6px;">
                     <button class="ibtn" onclick="openEditAction('${a.id}')" title="Editar" style="font-size:0.85rem;">✎</button>
@@ -1295,7 +1486,7 @@ function renderAcciones() {
         `).join('')}
         </div>
         <div style="font-size:0.72rem;color:var(--muted);margin-top:10px;text-align:center;">
-            ${team.actions.length} acciones · Se aplican a todas las sesiones nuevas
+            ${team.actions.length}${t('acum_actions_footer_suffix')}
         </div>
     `;
 }
@@ -1304,7 +1495,7 @@ let _editingActionId = null;
 
 function openNewAction() {
     _editingActionId = null;
-    document.getElementById('editActionTitle').textContent = 'Nueva acción';
+    document.getElementById('editActionTitle').textContent = t('modal_action_new');
     document.getElementById('editActionName').value = '';
     document.getElementById('editActionWeight').value = 20;
     document.getElementById('editActionWeightVal').textContent = '20';
@@ -1316,7 +1507,7 @@ function openEditAction(aid) {
     const a = team.actions.find(x=>x.id===aid);
     if(!a) return;
     _editingActionId = aid;
-    document.getElementById('editActionTitle').textContent = 'Editar acción';
+    document.getElementById('editActionTitle').textContent = t('modal_action_edit');
     document.getElementById('editActionName').value = a.name;
     document.getElementById('editActionWeight').value = a.weight;
     document.getElementById('editActionWeightVal').textContent = a.weight;
@@ -1341,7 +1532,7 @@ async function saveEditAction() {
 
 async function deleteAction(aid) {
     const team = getTeam(curTeamId);
-    if(team.actions.length <= 1) { alert('El equipo debe tener al menos una acción.'); return; }
+    if(team.actions.length <= 1) { alert(t('actions_min_one')); return; }
     team.actions = team.actions.filter(a=>a.id!==aid);
     await saveTeam(team);
     renderAcciones();
@@ -1375,17 +1566,17 @@ function renderAcumulados() {
 
     el.innerHTML = `
     <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:12px;margin-top:10px;margin-bottom:4px;">
-        <div style="font-size:0.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Filtrar por fecha</div>
+        <div style="font-size:0.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">${t('acum_filter')}</div>
         <div style="display:flex;gap:8px;align-items:center;">
             <input type="date" id="acumFrom" value="${_acumFrom}" min="${minDate}" max="${maxDate}"
                 style="flex:1;background:var(--card2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:7px 8px;font-size:0.78rem;">
             <span style="color:var(--muted);font-size:0.75rem;">→</span>
             <input type="date" id="acumTo"   value="${_acumTo}"   min="${minDate}" max="${maxDate}"
                 style="flex:1;background:var(--card2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:7px 8px;font-size:0.78rem;">
-            <button onclick="applyAcumFilter()" style="background:var(--primary);color:#000;border:none;border-radius:8px;padding:7px 12px;font-weight:800;font-size:0.78rem;cursor:pointer;">OK</button>
+            <button onclick="applyAcumFilter()" style="background:var(--primary);color:#000;border:none;border-radius:8px;padding:7px 12px;font-weight:800;font-size:0.78rem;cursor:pointer;">${t('filter_ok')}</button>
             ${filtered ? `<button onclick="clearAcumFilter()" style="background:none;border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:7px 10px;font-size:0.78rem;cursor:pointer;">✕</button>` : ''}
         </div>
-        ${filtered ? `<div style="font-size:0.68rem;color:var(--primary);margin-top:6px;">Mostrando sesiones filtradas · <span style="color:var(--muted)">Total sin filtro: ${done.length}</span></div>` : ''}
+        ${filtered ? `<div style="font-size:0.68rem;color:var(--primary);margin-top:6px;">${t('acum_filter_active')}<span style="color:var(--muted)">${t('acum_filter_total')}${done.length}</span></div>` : ''}
     </div>
     <div id="acumBody"></div>`;
 
@@ -1398,7 +1589,7 @@ function renderAcumulados() {
     const games     = done.filter(s=>s.type==='partido');
 
     if(!done.length) {
-        acumEl.innerHTML = '<div class="empty">Sin sesiones en el rango seleccionado.</div>';
+        acumEl.innerHTML = `<div class="empty">${t('acum_empty_range')}</div>`;
         return;
     }
 
@@ -1430,14 +1621,14 @@ function renderAcumulados() {
 
     // STAT CARDS
     html += `<div class="stat-cards" style="margin-top:14px;">
-        <div class="stat-card"><div class="stat-card-val">${done.length}</div><div class="stat-card-lbl">Sesiones</div></div>
-        <div class="stat-card"><div class="stat-card-val">${trainings.length}</div><div class="stat-card-lbl">Entrenos</div></div>
-        <div class="stat-card"><div class="stat-card-val">${games.length}</div><div class="stat-card-lbl">Partidos</div></div>
+        <div class="stat-card"><div class="stat-card-val">${done.length}</div><div class="stat-card-lbl">${t('acum_sessions')}</div></div>
+        <div class="stat-card"><div class="stat-card-val">${trainings.length}</div><div class="stat-card-lbl">${t('acum_trainings')}</div></div>
+        <div class="stat-card"><div class="stat-card-val">${games.length}</div><div class="stat-card-lbl">${t('acum_games')}</div></div>
     </div>`;
 
     // RANKING TEMPORADA — barras horizontales
     const maxScore = ranked[0]?.total || 1;
-    html += `<div class="slabel">Ranking de temporada</div>
+    html += `<div class="slabel">${t('acum_ranking')}</div>
     <div class="lcard" style="margin-bottom:20px;">
     ${ranked.map(({p,total,sessions},i)=>{
         const pct = (total/maxScore*100).toFixed(1);
@@ -1455,11 +1646,11 @@ function renderAcumulados() {
     if(trainings.length && games.length) {
         const cmpRows = ranked.filter(x=>x.tSes>0||x.gSes>0);
         const maxAvg = Math.max(...cmpRows.map(x=>Math.max(x.tSes?x.tScore/x.tSes:0, x.gSes?x.gScore/x.gSes:0)), 1);
-        html += `<div class="slabel">Entrenamiento vs Partido <span style="font-size:0.65rem;color:var(--muted)">(media por sesión)</span></div>
+        html += `<div class="slabel">${t('acum_trn_vs_gme')} <span style="font-size:0.65rem;color:var(--muted)">${t('acum_avg')}</span></div>
         <div class="lcard" style="margin-bottom:20px;">
         <div class="chart-legend">
-            <div style="display:flex;align-items:center;gap:5px;"><div class="legend-dot" style="background:var(--training)"></div><span class="legend-txt">Entrenamiento</span></div>
-            <div style="display:flex;align-items:center;gap:5px;"><div class="legend-dot" style="background:var(--game)"></div><span class="legend-txt">Partido</span></div>
+            <div style="display:flex;align-items:center;gap:5px;"><div class="legend-dot" style="background:var(--training)"></div><span class="legend-txt">${t('setup_training')}</span></div>
+            <div style="display:flex;align-items:center;gap:5px;"><div class="legend-dot" style="background:var(--game)"></div><span class="legend-txt">${t('setup_game')}</span></div>
         </div>
         ${cmpRows.map(({p,tScore,gScore,tSes,gSes})=>{
             const tAvg = tSes ? tScore/tSes : 0;
@@ -1470,12 +1661,12 @@ function renderAcumulados() {
                 <div class="cmp-row-name">${p.name} <span style="color:var(--muted);font-weight:400;font-size:0.72rem;">#${p.number}</span></div>
                 <div class="cmp-bars">
                     <div class="cmp-bar-line">
-                        <span class="cmp-bar-lbl t">ENT</span>
+                        <span class="cmp-bar-lbl t">${t('acum_trn_short')}</span>
                         <div class="cmp-bar-track"><div class="cmp-bar-inner t" style="width:${tPct}%"></div></div>
                         <span class="cmp-bar-val" style="color:var(--training)">${tSes?tAvg.toFixed(1):'—'}</span>
                     </div>
                     <div class="cmp-bar-line">
-                        <span class="cmp-bar-lbl p">PAR</span>
+                        <span class="cmp-bar-lbl p">${t('acum_gme_short')}</span>
                         <div class="cmp-bar-track"><div class="cmp-bar-inner p" style="width:${gPct}%"></div></div>
                         <span class="cmp-bar-val" style="color:var(--game)">${gSes?gAvg.toFixed(1):'—'}</span>
                     </div>
@@ -1488,7 +1679,7 @@ function renderAcumulados() {
     // ACCIONES MÁS USADAS — barras
     if(actionsSorted.length) {
         const maxAct = actionsSorted[0].total || 1;
-        html += `<div class="slabel">Acciones más registradas</div>
+        html += `<div class="slabel">${t('acum_top_actions')}</div>
         <div class="lcard" style="margin-bottom:20px;">
         ${actionsSorted.map((a,i)=>{
             const pct = (a.total/maxAct*100).toFixed(1);
@@ -1517,10 +1708,10 @@ function renderSessions() {
         const bc  = s.type==='partido'?'badge-p':'badge-t';
         const live = s.status==='live';
         return `<div class="session-card" onclick="openSession('${s.id}')">
-            <span class="badge ${bc}">${s.type==='partido'?'Part.':'Ent.'}</span>
+            <span class="badge ${bc}">${s.type==='partido'?t('session_badge_p'):t('session_badge_t')}</span>
             <div class="session-card-info">
                 <div class="session-card-name">${s.name||fmtDate(s.date)}</div>
-                <div class="session-card-date">${fmtDate(s.date)}${live?' · <span style="color:#ff9f43">● en vivo</span>':''}</div>
+                <div class="session-card-date">${fmtDate(s.date)}${live?` · <span style="color:#ff9f43">${t('session_live')}</span>`:''}</div>
             </div>
             <span class="session-card-score">${top>0?top.toFixed(0):'—'}</span>
             <button onclick="event.stopPropagation();promptDeleteSession('${s.id}')" style="background:none;border:none;padding:6px;cursor:pointer;color:var(--muted);flex-shrink:0;" title="Eliminar sesión">
@@ -1540,7 +1731,7 @@ function openSession(id) {
 function promptDeleteSession(id) {
     const s = getSession(id);
     const label = s.name || fmtDate(s.date);
-    confirmAction(`Se eliminará "${label}" y todos sus datos. Esta acción no se puede deshacer.`, async () => {
+    confirmAction(t('confirm_delete_session')(label), async () => {
         showLoading();
         await dbDeleteSession(id);
         hideLoading();
@@ -1576,7 +1767,7 @@ async function saveEditTeam() {
 
 function promptDeleteTeam() {
     const team = getTeam(curTeamId);
-    confirmAction(`Se eliminará el equipo "${team.name}" con todos sus jugadores y sesiones. Esta acción no se puede deshacer.`, async () => {
+    confirmAction(t('confirm_delete_team')(team.name), async () => {
         showLoading();
         await dbDeleteTeam(curTeamId);
         hideLoading();
@@ -1707,8 +1898,8 @@ function renderPlayer() {
     <div class="lcard">
         <div class="player-stat-row"><span class="player-stat-label">Total temporada</span><span class="player-stat-val gold">${total.toFixed(1)}</span></div>
         <div class="player-stat-row"><span class="player-stat-label">Sesiones</span><span class="player-stat-val">${participated.length}</span></div>
-        <div class="player-stat-row"><span class="player-stat-label">Media Ent.</span><span class="player-stat-val">${tAvg}</span></div>
-        <div class="player-stat-row"><span class="player-stat-label">Media Part.</span><span class="player-stat-val">${gAvg}</span></div>
+        <div class="player-stat-row"><span class="player-stat-label">${t('player_avg_trn')}</span><span class="player-stat-val">${tAvg}</span></div>
+        <div class="player-stat-row"><span class="player-stat-label">${t('player_avg_gme')}</span><span class="player-stat-val">${gAvg}</span></div>
     </div>`;
 
     const actionsHtml = actionsSorted.length ? `<div class="slabel">Acciones</div>
@@ -1754,8 +1945,8 @@ function renderPlayer() {
 
         html+=`<div class="slabel">Evolución por sesión
             <span style="margin-left:10px;font-weight:400;letter-spacing:0;">
-                <span style="display:inline-flex;align-items:center;gap:3px;"><span style="width:7px;height:7px;border-radius:2px;background:var(--training);display:inline-block;"></span><span style="color:var(--muted);font-size:0.65rem;">Ent.</span></span>
-                <span style="display:inline-flex;align-items:center;gap:3px;margin-left:6px;"><span style="width:7px;height:7px;border-radius:2px;background:var(--game);display:inline-block;"></span><span style="color:var(--muted);font-size:0.65rem;">Part.</span></span>
+                <span style="display:inline-flex;align-items:center;gap:3px;"><span style="width:7px;height:7px;border-radius:2px;background:var(--training);display:inline-block;"></span><span style="color:var(--muted);font-size:0.65rem;">${t('player_trn_short')}</span></span>
+                <span style="display:inline-flex;align-items:center;gap:3px;margin-left:6px;"><span style="width:7px;height:7px;border-radius:2px;background:var(--game);display:inline-block;"></span><span style="color:var(--muted);font-size:0.65rem;">${t('player_gme_short')}</span></span>
             </span>
         </div>
         <div class="lcard" style="margin-bottom:20px;">
@@ -1826,7 +2017,7 @@ function addGuest() {
 
 async function startSession() {
     const active=setupP.filter(p=>p.active);
-    if(!active.length) { alert('Selecciona al menos un jugador.'); return; }
+    if(!active.length) { alert(t('setup_alert_no_player')); return; }
     const team=getTeam(curTeamId);
     const stats={};
     active.forEach(p=>{ stats[p.id]={totalScore:0,actions:{}}; team.actions.forEach(a=>stats[p.id].actions[a.id]=0); });
@@ -1842,7 +2033,7 @@ async function startSession() {
 // ════════════════════════════════════════════
 function renderLive() {
     const s=getSession(curSessionId); const team=getTeam(s.teamId); if(!s||!team) return;
-    const label=s.type==='partido'?'Partido':'Entrenamiento';
+    const label=s.type==='partido'?t('setup_game'):t('setup_training');
     document.getElementById('liveTitle').textContent=s.name||label;
     document.getElementById('liveDate').textContent=fmtDate(s.date);
     const bc=s.type==='partido'?'badge badge-p':'badge badge-t';
@@ -1882,7 +2073,7 @@ function selectP(idx) {
 }
 
 function addStat(aid) {
-    if(selPlayerIdx===null) { document.getElementById('liveStatus').textContent='⚠ Selecciona un jugador'; return; }
+    if(selPlayerIdx===null) { document.getElementById('liveStatus').textContent=t('live_warning_select'); return; }
     const s=getSession(curSessionId); const team=getTeam(s.teamId);
     const p=s.activePlayers[selPlayerIdx]; const action=team.actions.find(a=>a.id===aid);
     s.stats[p.id].actions[aid]=(s.stats[p.id].actions[aid]||0)+1;
@@ -1895,7 +2086,7 @@ function addStat(aid) {
 
 function undoLast() {
     const s=getSession(curSessionId); const team=getTeam(s.teamId);
-    if(!s.history?.length) { document.getElementById('liveStatus').textContent='Sin acciones'; return; }
+    if(!s.history?.length) { document.getElementById('liveStatus').textContent=t('live_select_player'); return; }
     const last=s.history.pop();
     const st=s.stats[last.playerId];
     if(st.actions[last.actionId]>0){st.actions[last.actionId]--;st.totalScore-=last.value;}
@@ -1928,7 +2119,7 @@ function goToTeamAnalysis() {
 // ════════════════════════════════════════════
 function renderSummary() {
     const s=getSession(curSessionId); const team=getTeam(s.teamId); if(!s||!team) return;
-    const typeLabel=s.type==='partido'?'Partido':'Entrenamiento';
+    const typeLabel=s.type==='partido'?t('setup_game'):t('setup_training');
     const accentColor=s.type==='partido'?'var(--game)':'var(--training)';
     document.getElementById('sumSub').textContent=fmtDate(s.date);
     document.getElementById('sumTeam').textContent=team.name;
@@ -1967,11 +2158,11 @@ function renderSummary() {
 // ── EXPORT WHITE A4 ──────────────────────────
 function _buildPrintArea() {
     const s=getSession(curSessionId); const team=getTeam(s.teamId);
-    const typeLabel=s.type==='partido'?'Partido':'Entrenamiento';
+    const typeLabel=s.type==='partido'?t('setup_game'):t('setup_training');
     document.getElementById('printTeam').textContent=team.name;
     document.getElementById('printType').textContent=typeLabel+(s.name?' — '+s.name:'');
     document.getElementById('printDate').textContent=fmtDate(s.date);
-    document.getElementById('printFooterDate').textContent='Generado el '+fmtDate(today());
+    document.getElementById('printFooterDate').textContent=t('print_generated')+fmtDate(today());
     const sorted=[...s.activePlayers].map(p=>({...p,stats:s.stats[p.id]})).sort((a,b)=>b.stats.totalScore-a.stats.totalScore);
     const medals=['🥇','🥈','🥉'];
     document.getElementById('printBody').innerHTML=sorted.map((p,i)=>{
@@ -2057,6 +2248,7 @@ supa.auth.onAuthStateChange(async (event, session) => {
 // Arranque: comprobar si ya hay sesión activa
 let _initialLoad = true;
 (async () => {
+    applyLang(); // aplicar idioma guardado antes de mostrar nada
     showLoading();
     const { data: { session } } = await supa.auth.getSession();
     if(session?.user) {
