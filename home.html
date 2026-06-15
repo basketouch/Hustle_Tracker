@@ -593,6 +593,9 @@
             </div>
         </div>
         <div class="app-header-right">
+            <button class="ibtn" onclick="openEditTeam()" title="Editar equipo">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            </button>
             <button class="ibtn" onclick="promptDeleteTeam()" title="Eliminar equipo" style="color:var(--danger);border-color:var(--danger);">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
             </button>
@@ -852,6 +855,35 @@
     </div>
 </div>
 
+<!-- EDIT TEAM MODAL -->
+<div id="modal-edit-team" class="modal">
+    <div class="mbox">
+        <div class="mbox-title">Ajustes del equipo</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+            <div>
+                <div style="font-size:0.7rem;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px;">Nombre del equipo</div>
+                <input type="text" class="minput" id="editTeamName" placeholder="Nombre">
+            </div>
+            <div>
+                <div style="font-size:0.7rem;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px;">Temporada</div>
+                <input type="text" class="minput" id="editTeamSeason" placeholder="Ej: 2025/2026">
+            </div>
+            <div>
+                <div style="font-size:0.7rem;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px;">Categoría</div>
+                <input type="text" class="minput" id="editTeamCategory" placeholder="Ej: Sub-18, Senior, ACB...">
+            </div>
+            <div>
+                <div style="font-size:0.7rem;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px;">Notas</div>
+                <input type="text" class="minput" id="editTeamNotes" placeholder="Notas opcionales">
+            </div>
+        </div>
+        <div class="mactions">
+            <button class="mbtn mbtn-ghost" onclick="hideModal('modal-edit-team')">Cancelar</button>
+            <button class="mbtn mbtn-primary" onclick="saveEditTeam()">Guardar</button>
+        </div>
+    </div>
+</div>
+
 <!-- CONFIRM MODAL -->
 <div id="modal-confirm" class="modal">
     <div class="mbox">
@@ -986,7 +1018,8 @@ async function dbLoadAll() {
 }
 
 function dbRowToTeam(r) {
-    return { id: r.id, name: r.name, players: r.players, actions: r.actions, createdAt: r.created_at };
+    return { id: r.id, name: r.name, players: r.players, actions: r.actions,
+             season: r.season||'', category: r.category||'', notes: r.notes||'', createdAt: r.created_at };
 }
 function dbRowToSession(r) {
     return { id: r.id, teamId: r.team_id, type: r.type, date: r.date, name: r.name,
@@ -995,7 +1028,8 @@ function dbRowToSession(r) {
 }
 function teamToRow(t) {
     return { id: t.id, user_id: curUser.id, name: t.name, players: t.players,
-             actions: t.actions, created_at: t.createdAt };
+             actions: t.actions, season: t.season||'', category: t.category||'', notes: t.notes||'',
+             created_at: t.createdAt };
 }
 function sessionToRow(s) {
     return { id: s.id, user_id: curUser.id, team_id: s.teamId, type: s.type,
@@ -1212,7 +1246,7 @@ async function createTeam() {
 function renderTeam() {
     const team = getTeam(curTeamId); if(!team) return;
     document.getElementById('teamName').textContent = team.name;
-    document.getElementById('teamMeta').textContent = team.players.length+' jugadores';
+    document.getElementById('teamMeta').textContent = [team.players.length+' jugadores', team.season, team.category].filter(Boolean).join(' · ');
     switchTab(curTab, false);
 }
 
@@ -1305,15 +1339,57 @@ async function deleteAction(aid) {
 }
 
 // ── ACUMULADOS ──────────────────────────────
+let _acumFrom = '', _acumTo = '';
+
+function applyAcumFilter() {
+    _acumFrom = document.getElementById('acumFrom').value;
+    _acumTo   = document.getElementById('acumTo').value;
+    renderAcumulados();
+}
+function clearAcumFilter() {
+    _acumFrom = ''; _acumTo = '';
+    document.getElementById('acumFrom').value = '';
+    document.getElementById('acumTo').value   = '';
+    renderAcumulados();
+}
+
 function renderAcumulados() {
     const team = getTeam(curTeamId);
-    const done = teamSessions(curTeamId, true);
-    const trainings = done.filter(s=>s.type==='entrenamiento');
-    const games     = done.filter(s=>s.type==='partido');
+    let done = teamSessions(curTeamId, true);
     const el = document.getElementById('acumuladosContent');
 
+    // Render filtro siempre visible
+    const allDates = done.map(s=>s.date).sort();
+    const minDate  = allDates[0] || '';
+    const maxDate  = allDates[allDates.length-1] || '';
+    const filtered = _acumFrom || _acumTo;
+
+    el.innerHTML = `
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:12px;margin-top:10px;margin-bottom:4px;">
+        <div style="font-size:0.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Filtrar por fecha</div>
+        <div style="display:flex;gap:8px;align-items:center;">
+            <input type="date" id="acumFrom" value="${_acumFrom}" min="${minDate}" max="${maxDate}"
+                style="flex:1;background:var(--card2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:7px 8px;font-size:0.78rem;">
+            <span style="color:var(--muted);font-size:0.75rem;">→</span>
+            <input type="date" id="acumTo"   value="${_acumTo}"   min="${minDate}" max="${maxDate}"
+                style="flex:1;background:var(--card2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:7px 8px;font-size:0.78rem;">
+            <button onclick="applyAcumFilter()" style="background:var(--primary);color:#000;border:none;border-radius:8px;padding:7px 12px;font-weight:800;font-size:0.78rem;cursor:pointer;">OK</button>
+            ${filtered ? `<button onclick="clearAcumFilter()" style="background:none;border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:7px 10px;font-size:0.78rem;cursor:pointer;">✕</button>` : ''}
+        </div>
+        ${filtered ? `<div style="font-size:0.68rem;color:var(--primary);margin-top:6px;">Mostrando sesiones filtradas · <span style="color:var(--muted)">Total sin filtro: ${done.length}</span></div>` : ''}
+    </div>
+    <div id="acumBody"></div>`;
+
+    // Aplicar filtro
+    if(_acumFrom) done = done.filter(s=>s.date>=_acumFrom);
+    if(_acumTo)   done = done.filter(s=>s.date<=_acumTo);
+
+    const acumEl = document.getElementById('acumBody');
+    const trainings = done.filter(s=>s.type==='entrenamiento');
+    const games     = done.filter(s=>s.type==='partido');
+
     if(!done.length) {
-        el.innerHTML = '<div class="empty">Sin sesiones aún.<br>Inicia tu primera sesión para ver los análisis.</div>';
+        acumEl.innerHTML = '<div class="empty">Sin sesiones en el rango seleccionado.</div>';
         return;
     }
 
@@ -1417,7 +1493,7 @@ function renderAcumulados() {
         </div>`;
     }
 
-    el.innerHTML = html;
+    acumEl.innerHTML = html;
 }
 
 // ── SESSIONS ────────────────────────────────
@@ -1462,6 +1538,31 @@ function promptDeleteSession(id) {
         renderSessions();
         renderAcumulados();
     });
+}
+
+function openEditTeam() {
+    const team = getTeam(curTeamId);
+    document.getElementById('editTeamName').value     = team.name     || '';
+    document.getElementById('editTeamSeason').value   = team.season   || '';
+    document.getElementById('editTeamCategory').value = team.category || '';
+    document.getElementById('editTeamNotes').value    = team.notes    || '';
+    showModal('modal-edit-team');
+}
+
+async function saveEditTeam() {
+    const team = getTeam(curTeamId);
+    team.name     = document.getElementById('editTeamName').value.trim()     || team.name;
+    team.season   = document.getElementById('editTeamSeason').value.trim();
+    team.category = document.getElementById('editTeamCategory').value.trim();
+    team.notes    = document.getElementById('editTeamNotes').value.trim();
+    showLoading();
+    await saveTeam(team);
+    hideLoading();
+    hideModal('modal-edit-team');
+    // Actualizar header
+    document.getElementById('teamName').textContent = team.name;
+    document.getElementById('teamMeta').textContent = [team.players.length+' jugadores', team.season, team.category].filter(Boolean).join(' · ');
+    renderHome();
 }
 
 function promptDeleteTeam() {
